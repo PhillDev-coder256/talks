@@ -1,41 +1,46 @@
-# Phillip Ssempeebwa — Talks & Presentations
+# Talks — Phillip Ssempeebwa
 
-A single repository for all my public talks, hosted as a GitHub Pages site.
-
-Each talk is a self-contained HTML presentation with keyboard/touch navigation and fullscreen support.
+Public talks and presentations by **Phillip Ssempeebwa** — ML Engineer, Software Developer, IndabaX AI Club Facilitator at Kabale University.
 
 ---
 
-## Live Presentations
+## 🌐 Website
 
-| # | Talk | Event | Date |
-|---|------|-------|------|
-| 01 | [AI Beyond Code: Entering the Agentic Era](https://philldev-coder256.github.io/talks/) | IndabaX AI Club · Kabale University | July 2026 |
+**[philldev-coder256.github.io/talks](https://philldev-coder256.github.io/talks/)**
 
 ---
 
-## Navigation
+## Presentations
 
-- **Arrow keys** or **← →** — previous / next slide
-- **Space / Page Down** — next slide
-- **F** — fullscreen
-- **Swipe** — touch navigation on mobile
+### 01 · AI Beyond Code: Entering the Agentic Era
+**Event:** IndabaX AI Club · Kabale University  
+**Date:** July 17, 2026  
+**Link:** [philldev-coder256.github.io/talks/ai-beyond-code-agentic-era/](https://philldev-coder256.github.io/talks/ai-beyond-code-agentic-era/)
+
+> The shift from traditional AI models to autonomous AI Agents — what they are, how they think, and why they matter for every discipline from agriculture to medicine.
+
+**Topics covered:**
+- Evolution of AI: from rule-based systems to agentic AI
+- Generative AI vs Agentic AI — the real difference
+- How AI Agents think: goals, memory, reasoning, planning, tools, actions
+- Real-world examples across education, health, agriculture, business, and government
+- AI Agents already in the wild: GitHub Copilot, Cursor, OpenAI Operator, Claude, and more
+- AI Agents built this week — live examples from July 2026
+- Uganda-specific use cases
+- Careers in the AI era — skills that matter
+- Responsible AI
 
 ---
 
-## Adding a New Talk
+## Navigation (all presentations)
 
-1. Create a new folder: `talks/talk-name/`
-2. Add your `index.html` presentation inside it
-3. Add an entry to the table above in this README
-4. Push to `main` — GitHub Pages deploys automatically
+| Key | Action |
+|-----|--------|
+| `→` / `Space` | Next slide |
+| `←` | Previous slide |
+| `F` | Fullscreen |
+| Swipe | Navigate on mobile |
 
 ---
 
-## About
-
-**Phillip Ssempeebwa**  
-ML Engineer · Software Developer · UCC National Communications Testbed  
-Deep Learning Indaba · IndabaX AI Club Facilitator  
-
-GitHub: [@PhillDev-coder256](https://github.com/PhillDev-coder256)
+*Kabale University · IndabaX AI Club · 2026*

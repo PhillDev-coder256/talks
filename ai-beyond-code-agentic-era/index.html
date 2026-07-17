@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Beyond Code — Entering the Agentic Era</title>
+  <!-- Iconsax CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconsax@1.0.7/css/iconsax.css"/>
+  <style>
+    /* Iconsax sizing helpers */
+    .isax { font-size: 1em; vertical-align: middle; }
+    .isax-lg { font-size: 2.4rem; display: block; margin-bottom: 12px; }
+    .isax-xl { font-size: 3.5rem; }
+    .isax-xxl { font-size: 4rem; }
+  </style>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0e1a;
+      --surface: #111827;
+      --surface2: #1e2a3a;
+      --accent: #6c63ff;
+      --accent2: #00d4ff;
+      --accent3: #ff6b6b;
+      --accent4: #ffd166;
+      --accent5: #06d6a0;
+      --text: #f0f4ff;
+      --muted: #8899bb;
+      --border: rgba(108,99,255,0.25);
+    }
+    html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+    /* ===== SLIDES WRAPPER ===== */
+    #deck { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      padding: 60px 80px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.55s ease, transform 0.55s ease;
+      transform: translateX(60px);
+      text-align: center;
+    }
+    .slide.active { opacity: 1; pointer-events: all; transform: translateX(0); }
+    .slide.exit { opacity: 0; transform: translateX(-60px); }
+    /* ===== SLIDE BACKGROUNDS ===== */
+    .slide-dark { background: var(--bg); }
+    .slide-surface { background: var(--surface); }
+    .slide-gradient-purple { background: linear-gradient(135deg, #0a0e1a 0%, #1a0e3a 100%); }
+    .slide-gradient-blue { background: linear-gradient(135deg, #0a0e1a 0%, #0e1e3a 100%); }
+    .slide-gradient-teal { background: linear-gradient(135deg, #0a0e1a 0%, #0a2a2a 100%); }
+    .slide-gradient-warm { background: linear-gradient(135deg, #0a0e1a 0%, #2a1a0a 100%); }
+    /* ===== TYPOGRAPHY ===== */
+    h1 { font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 800; line-height: 1.1; }
+    h2 { font-size: clamp(1.6rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.2; }
+    h3 { font-size: clamp(1.2rem, 2.5vw, 2rem); font-weight: 600; }
+    h4 { font-size: clamp(1rem, 2vw, 1.4rem); font-weight: 600; }
+    p, li { font-size: clamp(0.95rem, 1.8vw, 1.25rem); line-height: 1.7; }
+    .subtitle { font-size: clamp(1rem, 2vw, 1.5rem); color: var(--muted); margin-top: 0.5rem; }
+    .highlight { color: var(--accent2); }
+    .highlight2 { color: var(--accent4); }
+    .highlight3 { color: var(--accent5); }
+    .highlight4 { color: var(--accent3); }
+    .accent-line {
+      display: block; width: 80px; height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px; margin: 18px auto;
+    }
+    /* ===== PROGRESS BAR ===== */
+    #progress-bar {
+      position: fixed; bottom: 0; left: 0; height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 0.4s ease; z-index: 100;
+    }
+    /* ===== NAVIGATION ===== */
+    #nav {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 16px; align-items: center; z-index: 100;
+      background: rgba(10,14,26,0.85); backdrop-filter: blur(10px);
+      padding: 10px 20px; border-radius: 50px;
+      border: 1px solid var(--border);
+    }
+    .nav-btn {
+      background: none; border: 1px solid var(--border); color: var(--text);
+      width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+      font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover { background: var(--accent); border-color: var(--accent); }
+    #slide-counter { font-size: 0.85rem; color: var(--muted); min-width: 70px; text-align: center; }
+    /* ===== SLIDE NUMBER ===== */
+    .slide-num {
+      position: absolute; top: 24px; right: 36px;
+      font-size: 0.8rem; color: var(--muted); font-weight: 500;
+    }
+    /* ===== LOGO ===== */
+    .logo-top {
+      position: absolute; top: 20px; left: 36px;
+      height: 44px; opacity: 0.9;
+    }
+    /* ===== COMPONENTS ===== */
+    .tag {
+      display: inline-block; padding: 4px 14px; border-radius: 50px;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      background: rgba(108,99,255,0.15); border: 1px solid var(--accent); color: var(--accent2);
+      margin-bottom: 18px;
+    }
+    .card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover { transform: translateY(-3px); border-color: var(--accent); }
+    .card-grid {
+      display: grid; gap: 20px; width: 100%; max-width: 1100px; margin-top: 30px;
+    }
+    .card-grid-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .card-grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    .icon-lg { font-size: 2.4rem; margin-bottom: 12px; display: block; }
+    /* ===== TIMELINE ===== */
+    .timeline {
+      display: flex; align-items: flex-start; gap: 0;
+      width: 100%; max-width: 1000px; margin-top: 30px;
+    }
+    .tl-item {
+      flex: 1; text-align: center; position: relative;
+    }
+    .tl-item::after {
+      content: ''; position: absolute; top: 24px; left: 50%; width: 100%;
+      height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .tl-item:last-child::after { display: none; }
+    .tl-dot {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px; font-weight: 800; font-size: 0.85rem; position: relative; z-index: 1;
+    }
+    /* ===== COMPARE TABLE ===== */
+    .compare-table {
+      width: 100%; max-width: 800px; border-collapse: collapse; margin-top: 30px;
+    }
+    .compare-table th {
+      padding: 14px 24px; font-size: 1.1rem;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .compare-table th:first-child { border-radius: 12px 0 0 0; }
+    .compare-table th:last-child { border-radius: 0 12px 0 0; }
+    .compare-table td { padding: 12px 24px; border-bottom: 1px solid var(--border); font-size: 1rem; }
+    .compare-table tr:nth-child(even) td { background: var(--surface2); }
+    .compare-table .no { color: var(--accent3); }
+    .compare-table .yes { color: var(--accent5); }
+    /* ===== QUOTE ===== */
+    .big-quote {
+      font-size: clamp(1.4rem, 3vw, 2.2rem); font-style: italic;
+      color: var(--accent2); max-width: 800px; line-height: 1.5;
+      position: relative; padding: 0 40px;
+    }
+    .big-quote::before { content: '\201C'; font-size: 5rem; color: var(--accent); position: absolute; top: -20px; left: 0; line-height: 1; }
+    .big-quote::after  { content: '\201D'; font-size: 5rem; color: var(--accent); position: absolute; bottom: -40px; right: 0; line-height: 1; }
+    /* ===== AGENT FLOW ===== */
+    .agent-flow { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 20px; }
+    .flow-node {
+      padding: 10px 28px; border-radius: 10px;
+      background: var(--surface2); border: 1px solid var(--accent);
+      font-size: 1rem; font-weight: 600; min-width: 180px;
+    }
+    .flow-arrow { color: var(--accent2); font-size: 1.4rem; }
+    /* ===== SECTOR GRID ===== */
+    .sector-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; width: 100%; max-width: 1100px; margin-top: 24px; }
+    .sector-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 14px; transition: all 0.2s; }
+    .sector-card:hover { border-color: var(--accent2); transform: translateY(-4px); }
+    /* ===== SKILLS ===== */
+    .skills-wrap { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; max-width: 900px; margin-top: 24px; }
+    .skill-pill {
+      padding: 10px 22px; border-radius: 50px; font-size: 0.95rem; font-weight: 600;
+      border: 1px solid var(--border);
+    }
+    /* ===== KEYFRAME ANIMATIONS ===== */
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+    @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-12px); } }
+    .pulse { animation: pulse 2s infinite; }
+    .float { animation: float 3s ease-in-out infinite; }
+    /* ===== GLOW CIRCLE ===== */
+    .glow { filter: drop-shadow(0 0 24px rgba(108,99,255,0.6)); }
+    .glow2 { filter: drop-shadow(0 0 24px rgba(0,212,255,0.5)); }
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .card-grid-3, .card-grid-4 { grid-template-columns: 1fr 1fr; }
+      .card-grid-2 { grid-template-columns: 1fr; }
+      .sector-grid { grid-template-columns: repeat(2, 1fr); }
+      .slide { padding: 50px 24px 80px; }
+    }
+  </style>
+</head>
+<body>
+<div id="deck">
+
+<!-- ============================================================ SLIDE 1 — TITLE -->
+<div class="slide slide-gradient-purple active" id="s1">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">01 / 25</span>
+  <div style="max-width:800px;">
+    <span class="tag">IndabaX AI Club · Kabale University · 2026</span>
+    <h1 style="font-size:clamp(2.8rem,6vw,5rem);">AI <span class="highlight">Beyond</span> Code</h1>
+    <h2 style="margin-top:10px; font-weight:400; color:var(--accent2);">Entering the Agentic Era</h2>
+    <span class="accent-line"></span>
+    <p class="subtitle">From Artificial Intelligence to Autonomous Intelligence</p>
+    <div style="margin-top:40px; display:flex; flex-direction:column; gap:6px; align-items:center;">
+      <p style="font-size:1.1rem; font-weight:600; color:var(--text);">Phillip Ssempeebwa</p>
+      <p style="color:var(--muted); font-size:0.95rem;">ML Engineer &nbsp;·&nbsp; Software Developer &nbsp;·&nbsp; UCC National Testbed</p>
+      <p style="color:var(--muted); font-size:0.95rem;">Deep Learning Indaba &nbsp;·&nbsp; IndabaX AI Club Facilitator</p>
+    </div>
+    <div style="margin-top:40px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+      <span class="skill-pill" style="background:rgba(108,99,255,0.15); border-color:var(--accent);"><i class="isax isax-timer isax"></i> 60 Minutes</span>
+      <span class="skill-pill" style="background:rgba(0,212,255,0.1); border-color:var(--accent2);"><i class="isax isax-global isax"></i> All Disciplines Welcome</span>
+      <span class="skill-pill" style="background:rgba(6,214,160,0.1); border-color:var(--accent5);"><i class="isax isax-people isax"></i> Interactive Session</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 2 — AGENDA -->
+<div class="slide slide-dark" id="s2">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">02 / 25</span>
+  <span class="tag">Session Roadmap</span>
+  <h2>What We're Covering <span class="highlight">Today</span></h2>
+  <span class="accent-line"></span>
+  <div class="card-grid card-grid-3" style="max-width:900px; margin-top:28px;">
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <i class="isax isax-snow icon-lg"></i>
+      <h4>Icebreaker</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">— Who's in the room?</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent2);">
+      <i class="isax isax-book icon-lg"></i>
+      <h4>AI Evolution Story</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">— From rules to agents</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent5);">
+      <i class="isax isax-cpu icon-lg"></i>
+      <h4>What AI Agents Are</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">— Deep dive</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent4);">
+      <i class="isax isax-flash icon-lg"></i>
+      <h4>Live Demo</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">— See it in action</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent3);">
+      <i class="isax isax-briefcase icon-lg"></i>
+      <h4>Careers Discussion</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">— Your future with AI</p>
+    </div>
+    <div class="card" style="border-top:3px solid #c77dff;">
+      <i class="isax isax-rocket icon-lg"></i>
+      <h4>Challenge + Q&A</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">— Your turn</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 3 — ICEBREAKER -->
+<div class="slide slide-gradient-blue" id="s3">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">03 / 25</span>
+  <span class="tag"><i class="isax isax-snow isax" style="font-size:0.9em;"></i> Icebreaker — 5 Minutes</span>
+  <h2>Quick <span class="highlight">Show of Hands</span></h2>
+  <span class="accent-line"></span>
+  <div class="card-grid card-grid-2" style="max-width:900px; margin-top:28px; text-align:left;">
+    <div class="card">
+      <i class="isax isax-hand isax-xxl" style="display:block; margin-bottom:10px;"></i>
+      <h4 style="margin-top:10px; color:var(--accent2);">Who used ChatGPT or any AI tool this week?</h4>
+      <p style="color:var(--muted); margin-top:8px; font-size:0.9rem;">Hands up — let's see the room</p>
+    </div>
+    <div class="card">
+      <i class="isax isax-teacher isax-xxl" style="display:block; margin-bottom:10px;"></i>
+      <h4 style="margin-top:10px; color:var(--accent4);">What course / discipline are you from?</h4>
+      <p style="color:var(--muted); margin-top:8px; font-size:0.9rem;">Shout it out — every background counts</p>
+    </div>
+    <div class="card">
+      <i class="isax isax-message-question isax-xxl" style="display:block; margin-bottom:10px;"></i>
+      <h4 style="margin-top:10px; color:var(--accent5);">Do you think AI will replace your job?</h4>
+      <p style="color:var(--muted); margin-top:8px; font-size:0.9rem;">Hands up for YES — let's discuss</p>
+    </div>
+    <div class="card">
+      <i class="isax isax-global isax-xxl" style="display:block; margin-bottom:10px;"></i>
+      <h4 style="margin-top:10px; color:var(--accent3);">If you could build one AI agent for Uganda, what would it do?</h4>
+      <p style="color:var(--muted); margin-top:8px; font-size:0.9rem;">Take 30 seconds — think about it</p>
+    </div>
+  </div>
+  <p style="margin-top:28px; color:var(--muted); font-size:1rem;"><i class="isax isax-lamp-on isax"></i> <em>No wrong answers. Every discipline is the right discipline for AI.</em></p>
+</div>
+
+<!-- ============================================================ SLIDE 4 — IMAGINE THIS -->
+<div class="slide slide-gradient-purple" id="s4">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">04 / 25</span>
+  <span class="tag"><i class="isax isax-lamp-on isax" style="font-size:0.9em;"></i> Opening Scenario</span>
+  <h2>Imagine <span class="highlight">This...</span></h2>
+  <span class="accent-line"></span>
+  <div style="display:flex; gap:40px; align-items:flex-start; max-width:1050px; margin-top:24px; text-align:left; flex-wrap:wrap;">
+    <div class="card" style="flex:1; min-width:260px; border:1px solid var(--accent3);">
+      <h4 style="color:var(--accent3);"><i class="isax isax-close-circle isax"></i> Today — You ask ChatGPT:</h4>
+      <p style="margin-top:14px; font-size:1.05rem; line-height:1.8; color:var(--text);">
+        "Write me an email."<br/>
+        "Summarize this document."<br/>
+        "Generate a business plan."
+      </p>
+      <p style="margin-top:14px; color:var(--muted); font-size:0.95rem;">One question. One answer. You do the rest.</p>
+    </div>
+    <div style="flex:0; display:flex; align-items:center; font-size:2.5rem; padding-top:60px;">→</div>
+    <div class="card" style="flex:1; min-width:260px; border:1px solid var(--accent5);">
+      <h4 style="color:var(--accent5);"><i class="isax isax-tick-circle isax"></i> Tomorrow — You tell your AI Agent:</h4>
+      <p style="margin-top:14px; font-size:1rem; line-height:2; color:var(--text);">
+        "Plan my conference."<br/>
+        "Book meetings with speakers."<br/>
+        "Prepare my presentation deck."<br/>
+        "Create social media posts."<br/>
+        "Summarize every incoming email."<br/>
+        "Notify me about changes."<br/>
+        "Generate my final report."
+      </p>
+      <p style="margin-top:14px; color:var(--accent5); font-weight:700; font-size:1rem;">…and it actually does all of it.</p>
+    </div>
+  </div>
+  <div style="margin-top:30px; background:rgba(108,99,255,0.1); border:1px solid var(--accent); border-radius:14px; padding:18px 32px;">
+    <p style="font-size:1.15rem; color:var(--accent2); font-weight:600;"><i class="isax isax-hand-2 isax"></i> ATR: "Who thinks this already exists?" &nbsp;→&nbsp; <span style="color:var(--accent4);">It already does.</span></p>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 5 — WHY IT MATTERS -->
+<div class="slide slide-dark" id="s5">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">05 / 25</span>
+  <span class="tag"><i class="isax isax-global isax" style="font-size:0.9em;"></i> The Big Picture</span>
+  <h2>Why This <span class="highlight">Matters</span> — Right Now</h2>
+  <span class="accent-line"></span>
+  <div style="display:flex; gap:30px; max-width:900px; margin-top:28px; justify-content:center; flex-wrap:wrap;">
+    <div style="text-align:center; flex:1; min-width:180px;">
+      <div style="font-size:3.5rem; filter:drop-shadow(0 0 16px rgba(0,212,255,0.5));"><i class="isax isax-clock isax-xl"></i></div>
+      <h3 style="margin-top:14px; color:var(--muted);">Five years ago</h3>
+      <p style="margin-top:10px; font-size:1.1rem; color:var(--text);">AI <strong>predicted</strong></p>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:6px;">Pattern recognition, forecasting, classification</p>
+    </div>
+    <div style="font-size:2rem; display:flex; align-items:center; color:var(--accent2); padding-top:30px;">→</div>
+    <div style="text-align:center; flex:1; min-width:180px;">
+      <div style="font-size:3.5rem; filter:drop-shadow(0 0 16px rgba(108,99,255,0.5));"><i class="isax isax-magic-star isax-xl"></i></div>
+      <h3 style="margin-top:14px; color:var(--muted);">Today</h3>
+      <p style="margin-top:10px; font-size:1.1rem; color:var(--text);">AI <strong>generates</strong></p>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:6px;">Text, images, code, video, music</p>
+    </div>
+    <div style="font-size:2rem; display:flex; align-items:center; color:var(--accent2); padding-top:30px;">→</div>
+    <div style="text-align:center; flex:1; min-width:180px;">
+      <div style="font-size:3.5rem; filter:drop-shadow(0 0 16px rgba(255,209,102,0.5));"><i class="isax isax-rocket isax-xl"></i></div>
+      <h3 style="margin-top:14px; color:var(--accent4);">Tomorrow</h3>
+      <p style="margin-top:10px; font-size:1.2rem; font-weight:700; color:var(--accent4);">AI <strong>collaborates</strong></p>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:6px;">Plans, reasons, acts, gets work done</p>
+    </div>
+  </div>
+  <div style="margin-top:40px; max-width:700px;">
+    <div class="big-quote" style="font-size:clamp(1.1rem,2.2vw,1.6rem);">The next decade belongs to people who know how to work <em>with</em> AI — not compete against it.</div>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 6 — PERSONAL STORY -->
+<div class="slide slide-gradient-teal" id="s6">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">06 / 25</span>
+  <span class="tag"><i class="isax isax-book-1 isax" style="font-size:0.9em;"></i> Personal Story</span>
+  <h2>From <span class="highlight">My Own</span> Journey</h2>
+  <span class="accent-line"></span>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; max-width:1000px; margin-top:24px; text-align:left;">
+    <div class="card" style="border-left:3px solid var(--accent3);">
+      <h4 style="color:var(--accent3);">When I started programming…</h4>
+      <p style="margin-top:12px; line-height:1.8; color:var(--muted);">
+        AI mostly meant machine learning models.<br/>
+        We trained models. Evaluated accuracy.<br/>
+        Built prediction pipelines.<br/>
+        Wrote every rule by hand.<br/>
+        <br/>
+        My chest X-ray deep learning work? Months of training, tuning, testing — manually.
+      </p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent5);">
+      <h4 style="color:var(--accent5);">Today my workflow is completely different.</h4>
+      <p style="margin-top:12px; line-height:2; color:var(--text); font-size:0.95rem;">
+        <i class="isax isax-search-normal isax"></i> AI helps me <strong>research</strong><br/>
+        <i class="isax isax-note-text isax"></i> Writes <strong>documentation</strong><br/>
+        <i class="isax isax-monitor-mobbile isax"></i> Generates and <strong>reviews code</strong><br/>
+        <i class="isax isax-document-text isax"></i> Analyzes <strong>research papers</strong><br/>
+        <i class="isax isax-building-3 isax"></i> Designs <strong>systems &amp; architectures</strong><br/>
+        <i class="isax isax-lamp-on isax"></i> Brainstorms <strong>ideas with me</strong>
+      </p>
+    </div>
+  </div>
+  <div style="margin-top:28px; background:rgba(6,214,160,0.08); border:1px solid var(--accent5); border-radius:14px; padding:18px 32px; max-width:700px;">
+    <p style="font-size:1.1rem; color:var(--accent5); font-weight:600;">
+      "I'm no longer simply using AI.<br/>I'm working <em>alongside</em> AI — as a collaborator."
+    </p>
+    <p style="color:var(--muted); margin-top:8px; font-size:0.9rem;">UCC National Communications Testbed · Deep Learning Indaba · AI Research Fellowship</p>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 7 — EVOLUTION TIMELINE -->
+<div class="slide slide-dark" id="s7">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">07 / 25</span>
+  <span class="tag"><i class="isax isax-chart-2 isax" style="font-size:0.9em;"></i> Evolution of AI</span>
+  <h2>The <span class="highlight">AI Journey</span> — 75 Years in 5 Steps</h2>
+  <span class="accent-line"></span>
+  <div class="timeline" style="max-width:1100px; margin-top:36px;">
+    <div class="tl-item">
+      <div class="tl-dot" style="background:linear-gradient(135deg,#555,#777);">1950s</div>
+      <h4 style="margin-top:10px; font-size:0.95rem;">Rule-Based<br/>Systems</h4>
+      <p style="color:var(--muted); font-size:0.8rem; margin-top:6px; padding:0 8px;">If X then Y. Hard-coded logic. No learning.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:linear-gradient(135deg,#4a90d9,#357ab8);">1990s</div>
+      <h4 style="margin-top:10px; font-size:0.95rem;">Machine<br/>Learning</h4>
+      <p style="color:var(--muted); font-size:0.8rem; margin-top:6px; padding:0 8px;">Learn patterns from data. Predictions emerge.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:linear-gradient(135deg,#7b2ff7,#5b1ad4);">2012</div>
+      <h4 style="margin-top:10px; font-size:0.95rem;">Deep<br/>Learning</h4>
+      <p style="color:var(--muted); font-size:0.8rem; margin-top:6px; padding:0 8px;">Neural nets. Vision. Speech. Language.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:linear-gradient(135deg,var(--accent),var(--accent2));">2022</div>
+      <h4 style="margin-top:10px; font-size:0.95rem;">Generative<br/>AI</h4>
+      <p style="color:var(--muted); font-size:0.8rem; margin-top:6px; padding:0 8px;">ChatGPT, DALL-E. Creates text, images, code.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:linear-gradient(135deg,var(--accent4),#ff9f1c); animation:pulse 2s infinite;">2025+</div>
+      <h4 style="margin-top:10px; font-size:0.95rem; color:var(--accent4);">Agentic<br/>AI <i class="isax isax-flash isax"></i></h4>
+      <p style="color:var(--accent4); font-size:0.8rem; margin-top:6px; padding:0 8px; font-weight:600;">Plans. Reasons. Acts. Gets work done.</p>
+    </div>
+  </div>
+  <div style="margin-top:40px; display:flex; gap:20px; flex-wrap:wrap; justify-content:center;">
+    <div style="background:rgba(108,99,255,0.1); border:1px solid var(--accent); border-radius:12px; padding:14px 22px; font-size:0.95rem; color:var(--muted);"><i class="isax isax-hospital isax"></i> My Deep Learning work: chest X-ray AI at <strong style="color:var(--text);">2012 era</strong></div>
+    <div style="background:rgba(255,209,102,0.1); border:1px solid var(--accent4); border-radius:12px; padding:14px 22px; font-size:0.95rem; color:var(--muted);"><i class="isax isax-wifi isax"></i> UCC Testbed work: <strong style="color:var(--text);">bridging all eras</strong></div>
+    <div style="background:rgba(6,214,160,0.1); border:1px solid var(--accent5); border-radius:12px; padding:14px 22px; font-size:0.95rem; color:var(--muted);"><i class="isax isax-cpu isax"></i> Today: building with <strong style="color:var(--accent5);">Agentic AI</strong></div>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 8 — RULE BASED -->
+<div class="slide slide-surface" id="s8">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">08 / 25</span>
+  <span class="tag">Era 1 — 1950s</span>
+  <h2>Rule-Based AI: <span class="highlight">"If This… Then That"</span></h2>
+  <span class="accent-line"></span>
+  <p style="max-width:600px; color:var(--muted); margin-top:8px;">No learning. No adaptation. Just logic written by humans.</p>
+  <div class="card-grid card-grid-3" style="margin-top:28px; max-width:900px;">
+    <div class="card" style="text-align:center;">
+      <i class="isax isax-buildings-2 isax-lg"></i>
+      <h4>ATM Machine</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:6px;">If PIN correct → dispense cash</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <i class="isax isax-routing isax-lg"></i>
+      <h4>Traffic Lights</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:6px;">If timer ends → switch light</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <i class="isax isax-sun-1 isax-lg"></i>
+      <h4>Thermostat</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:6px;">If temp &lt; 20°C → turn on heater</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <i class="isax isax-sms isax-lg"></i>
+      <h4>Spam Filter</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:6px;">If "win prize" in email → block</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <i class="isax isax-calculator isax-lg"></i>
+      <h4>Calculator</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:6px;">If button pressed → compute</p>
+    </div>
+    <div class="card" style="text-align:center; background:rgba(108,99,255,0.08); border-color:var(--accent);">
+      <i class="isax isax-warning-2 isax-lg" style="color:var(--accent3);"></i>
+      <h4 style="color:var(--accent3);">The Limitation</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:6px;">They never "think". Every rule must be written manually.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 9 — MACHINE LEARNING -->
+<div class="slide slide-gradient-blue" id="s9">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">09 / 25</span>
+  <span class="tag">Era 2 — 1990s</span>
+  <h2>Machine Learning: <span class="highlight">AI Learns From Data</span></h2>
+  <span class="accent-line"></span>
+  <div style="display:flex; gap:30px; max-width:1000px; margin-top:24px; align-items:stretch; flex-wrap:wrap;">
+    <div class="card" style="flex:1; min-width:260px; text-align:center;">
+      <p style="font-size:1.05rem; color:var(--muted);">Old approach:</p>
+      <h3 style="margin-top:10px; color:var(--accent3);">Human programs every rule</h3>
+      <div style="margin:16px 0; font-size:2rem;">→</div>
+      <p style="font-size:1.05rem; color:var(--muted);">New approach:</p>
+      <h3 style="margin-top:10px; color:var(--accent5);">Give AI examples → AI finds patterns</h3>
+    </div>
+    <div style="flex:2; min-width:300px;">
+      <div class="card-grid card-grid-2">
+        <div class="card">
+          <i class="isax isax-video-play isax-lg"></i>
+          <h4>Netflix Recommendations</h4>
+          <p style="color:var(--muted); font-size:0.85rem; margin-top:6px;">Learns what you enjoy from viewing history</p>
+        </div>
+        <div class="card">
+          <i class="isax isax-card-tick-1 isax-lg"></i>
+          <h4>Fraud Detection</h4>
+          <p style="color:var(--muted); font-size:0.85rem; margin-top:6px;">Learns patterns of suspicious transactions</p>
+        </div>
+        <div class="card">
+          <i class="isax isax-tree isax-lg"></i>
+          <h4>Crop Yield Prediction</h4>
+          <p style="color:var(--muted); font-size:0.85rem; margin-top:6px;">Learns from soil, weather, historical data</p>
+        </div>
+        <div class="card" style="border-color:var(--accent2);">
+          <i class="isax isax-health isax-lg" style="color:var(--accent2);"></i>
+          <h4 style="color:var(--accent2);">My Work: Chest X-Ray AI</h4>
+          <p style="color:var(--muted); font-size:0.85rem; margin-top:6px;">Deep Learning Indaba — detecting disease patterns from images</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 10 — GENERATIVE AI -->
+<div class="slide slide-gradient-purple" id="s10">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">10 / 25</span>
+  <span class="tag">Era 4 — 2022</span>
+  <h2>Generative AI: <span class="highlight">AI That Creates</span></h2>
+  <span class="accent-line"></span>
+  <p style="color:var(--muted); max-width:700px; margin-top:4px;">This is what most people know today. ChatGPT, Gemini, Claude, Copilot...</p>
+  <div class="card-grid card-grid-3" style="margin-top:26px; max-width:900px;">
+    <div class="card" style="text-align:center;">
+      <i class="isax isax-note-2 isax-lg"></i>
+      <h4>Text</h4>
+      <p style="color:var(--muted); font-size:0.85rem; margin-top:6px;">Essays, emails, reports, stories, code</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <i class="isax isax-image isax-lg"></i>
+      <h4>Images</h4>
+      <p style="color:var(--muted); font-size:0.85rem; margin-top:6px;">Midjourney, DALL-E, Stable Diffusion</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <i class="isax isax-music isax-lg"></i>
+      <h4>Music</h4>
+      <p style="color:var(--muted); font-size:0.85rem; margin-top:6px;">Suno, Udio — full songs from a prompt</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <i class="isax isax-code isax-lg"></i>
+      <h4>Code</h4>
+      <p style="color:var(--muted); font-size:0.85rem; margin-top:6px;">GitHub Copilot, Cursor AI, Claude</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <i class="isax isax-video isax-lg"></i>
+      <h4>Video</h4>
+      <p style="color:var(--muted); font-size:0.85rem; margin-top:6px;">Sora, Runway — video from text</p>
+    </div>
+    <div class="card" style="text-align:center; background:rgba(255,107,107,0.08); border-color:var(--accent3);">
+      <i class="isax isax-warning-2 isax-lg" style="color:var(--accent3);"></i>
+      <h4 style="color:var(--accent3);">But…</h4>
+      <p style="color:var(--muted); font-size:0.85rem; margin-top:6px; font-weight:600;">Most still <em>wait for YOU</em> to tell them what to do. One prompt. One response.</p>
+    </div>
+  </div>
+  <div style="margin-top:24px; background:rgba(255,209,102,0.1); border:1px solid var(--accent4); border-radius:12px; padding:14px 28px;">
+    <p style="color:var(--accent4); font-size:1rem; font-weight:600;"><i class="isax isax-repeat isax"></i> Generative AI reacts. Agentic AI acts.</p>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 11 — THEN CAME AGENTS -->
+<div class="slide slide-dark" id="s11">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">11 / 25</span>
+  <span class="tag">Era 5 — Now</span>
+  <h2>Then Came <span class="highlight">AI Agents</span></h2>
+  <span class="accent-line"></span>
+  <div style="display:flex; gap:40px; align-items:center; max-width:1000px; margin-top:24px; flex-wrap:wrap; justify-content:center;">
+    <div style="flex:1; min-width:280px;">
+      <div class="card" style="background:linear-gradient(135deg,rgba(108,99,255,0.15),rgba(0,212,255,0.1)); border-color:var(--accent2);">
+        <h3 style="font-size:1.5rem; color:var(--accent2);">An AI Agent <em>doesn't wait.</em></h3>
+        <div style="margin-top:20px; display:flex; flex-direction:column; gap:14px;">
+          <div style="display:flex; align-items:center; gap:12px;"><i class="isax isax-tick-circle isax" style="color:var(--accent5); font-size:1.3rem;"></i><span style="font-size:1.05rem;"><strong>Plans</strong> — breaks goals into steps</span></div>
+          <div style="display:flex; align-items:center; gap:12px;"><i class="isax isax-tick-circle isax" style="color:var(--accent5); font-size:1.3rem;"></i><span style="font-size:1.05rem;"><strong>Remembers</strong> — context across sessions</span></div>
+          <div style="display:flex; align-items:center; gap:12px;"><i class="isax isax-tick-circle isax" style="color:var(--accent5); font-size:1.3rem;"></i><span style="font-size:1.05rem;"><strong>Reasons</strong> — decides the best approach</span></div>
+          <div style="display:flex; align-items:center; gap:12px;"><i class="isax isax-tick-circle isax" style="color:var(--accent5); font-size:1.3rem;"></i><span style="font-size:1.05rem;"><strong>Uses Tools</strong> — web, files, APIs, code</span></div>
+          <div style="display:flex; align-items:center; gap:12px;"><i class="isax isax-tick-circle isax" style="color:var(--accent5); font-size:1.3rem;"></i><span style="font-size:1.05rem;"><strong>Acts</strong> — executes, emails, schedules</span></div>
+          <div style="display:flex; align-items:center; gap:12px;"><i class="isax isax-tick-circle isax" style="color:var(--accent5); font-size:1.3rem;"></i><span style="font-size:1.05rem;"><strong>Delivers Results</strong> — goal achieved</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="flex:1; min-width:240px;">
+      <h4 style="color:var(--muted); margin-bottom:16px;">Real example: "I want to organize the Worship Expression"</h4>
+      <div class="agent-flow">
+        <div class="flow-node" style="background:rgba(255,209,102,0.1); border-color:var(--accent4); color:var(--accent4);"><i class="isax isax-target isax"></i> Goal Received</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node"><i class="isax isax-task-square isax"></i> Creates checklist &amp; timeline</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node"><i class="isax isax-calendar-1 isax"></i> Books venue reminders</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node"><i class="isax isax-brush-2 isax"></i> Designs event poster</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node"><i class="isax isax-sms isax"></i> Drafts &amp; sends emails</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node"><i class="isax isax-mobile isax"></i> Creates social media posts</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node" style="background:rgba(6,214,160,0.1); border-color:var(--accent5); color:var(--accent5);"><i class="isax isax-tick-circle isax"></i> Summarizes progress report</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 12 — COMPARISON TABLE -->
+<div class="slide slide-surface" id="s12">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">12 / 25</span>
+  <span class="tag"><i class="isax isax-chart-21 isax" style="font-size:0.9em;"></i> The Key Difference</span>
+  <h2>Traditional AI <span class="highlight">vs</span> Agentic AI</h2>
+  <span class="accent-line"></span>
+  <div style="overflow:auto; margin-top:24px; width:100%; max-width:860px;">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th style="text-align:left; background:var(--surface2); color:var(--muted);">Dimension</th>
+          <th style="background:rgba(255,107,107,0.2); color:var(--accent3);">Traditional / Generative AI</th>
+          <th style="background:rgba(6,214,160,0.2); color:var(--accent5);">Agentic AI</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Approach</td><td class="no">Answers questions</td><td class="yes">Solves problems end-to-end</td></tr>
+        <tr><td>Mode</td><td class="no">Reactive</td><td class="yes">Proactive</td></tr>
+        <tr><td>Input</td><td class="no">Single prompt</td><td class="yes">A goal</td></tr>
+        <tr><td>Memory</td><td class="no">Mostly none</td><td class="yes">Persistent memory</td></tr>
+        <tr><td>Planning</td><td class="no">No planning</td><td class="yes">Multi-step planning</td></tr>
+        <tr><td>Tools</td><td class="no">None</td><td class="yes">Web, files, APIs, code, email…</td></tr>
+        <tr><td>Control</td><td class="no">Human controls every step</td><td class="yes">Human supervises, AI executes</td></tr>
+        <tr><td>Output</td><td class="no">Text / image / code</td><td class="yes">Completed tasks, real outcomes</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-top:24px; background:rgba(255,209,102,0.1); border:1px solid var(--accent4); border-radius:12px; padding:14px 28px; max-width:700px;">
+    <p style="color:var(--accent4); font-size:1rem;"><i class="isax isax-lamp-on isax"></i> <strong>Key insight:</strong> Generative AI is a brilliant assistant. Agentic AI is a brilliant collaborator that takes initiative.</p>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 13 — INSIDE AN AGENT -->
+<div class="slide slide-gradient-purple" id="s13">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">13 / 25</span>
+  <span class="tag"><i class="isax isax-brain isax" style="font-size:0.9em;"></i> Inside an AI Agent</span>
+  <h2>What Makes an Agent <span class="highlight">Intelligent?</span></h2>
+  <span class="accent-line"></span>
+  <div class="card-grid card-grid-3" style="max-width:960px; margin-top:24px; text-align:left;">
+    <div class="card" style="border-top:3px solid var(--accent4);">
+      <i class="isax isax-target isax-lg" style="color:var(--accent4);"></i>
+      <h4 style="color:var(--accent4);">Goals</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">Knows what it's trying to achieve. Keeps focus even across many steps.</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent2);">
+      <i class="isax isax-brain isax-lg" style="color:var(--accent2);"></i>
+      <h4 style="color:var(--accent2);">Memory</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">Remembers past actions, context, and results — short and long term.</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent5);">
+      <i class="isax isax-search-zoom-in-1 isax-lg" style="color:var(--accent5);"></i>
+      <h4 style="color:var(--accent5);">Reasoning</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">Analyzes information, evaluates options, and decides what to do next.</p>
+    </div>
+    <div class="card" style="border-top:3px solid #c77dff;">
+      <i class="isax isax-map-1 isax-lg" style="color:#c77dff;"></i>
+      <h4 style="color:#c77dff;">Planning</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">Breaks complex goals into sequences of manageable sub-tasks.</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent3);">
+      <i class="isax isax-setting-2 isax-lg" style="color:var(--accent3);"></i>
+      <h4 style="color:var(--accent3);">Tools</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">Uses web search, code execution, email, calendars, APIs, databases.</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent); background:rgba(108,99,255,0.08);">
+      <i class="isax isax-flash isax-lg" style="color:var(--accent);"></i>
+      <h4 style="color:var(--accent);">Actions</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">Actually executes — sends emails, writes files, runs code, makes decisions.</p>
+    </div>
+  </div>
+  <p style="margin-top:22px; color:var(--muted); font-size:0.95rem;"><i class="isax isax-refresh-2 isax"></i> These components work in a continuous loop until the goal is achieved</p>
+</div>
+
+<!-- ============================================================ SLIDE 14 — RESEARCH PAPER EXAMPLE -->
+<div class="slide slide-dark" id="s14">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">14 / 25</span>
+  <span class="tag"><i class="isax isax-book-saved isax" style="font-size:0.9em;"></i> Side by Side Example</span>
+  <h2>Writing a Research Paper: <span class="highlight">Old Way vs New Way</span></h2>
+  <span class="accent-line"></span>
+  <div style="display:flex; gap:24px; max-width:1050px; margin-top:24px; flex-wrap:wrap; text-align:left;">
+    <div class="card" style="flex:1; min-width:260px; border:1px solid var(--accent3);">
+      <h4 style="color:var(--accent3); margin-bottom:14px;"><i class="isax isax-note-2 isax"></i> Traditional Generative AI</h4>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; gap:10px; align-items:flex-start;"><span style="color:var(--accent3);">→</span><p style="font-size:0.95rem; color:var(--muted);">Ask: "Write my introduction"</p></div>
+        <div style="display:flex; gap:10px; align-items:flex-start;"><span style="color:var(--accent3);">→</span><p style="font-size:0.95rem; color:var(--muted);">Ask: "Write my literature review"</p></div>
+        <div style="display:flex; gap:10px; align-items:flex-start;"><span style="color:var(--accent3);">→</span><p style="font-size:0.95rem; color:var(--muted);">Ask: "Now write the conclusion"</p></div>
+        <div style="display:flex; gap:10px; align-items:flex-start;"><span style="color:var(--accent3);">→</span><p style="font-size:0.95rem; color:var(--muted);">Manually copy, paste, format</p></div>
+        <div style="display:flex; gap:10px; align-items:flex-start;"><span style="color:var(--accent3);">→</span><p style="font-size:0.95rem; color:var(--muted);">Find references yourself</p></div>
+        <div style="display:flex; gap:10px; align-items:flex-start;"><span style="color:var(--accent3);">→</span><p style="font-size:0.95rem; color:var(--muted);">Format citations manually</p></div>
+      </div>
+      <div style="margin-top:16px; padding:10px; background:rgba(255,107,107,0.08); border-radius:8px;">
+        <p style="color:var(--accent3); font-size:0.9rem; font-weight:600;">You do most of the coordination work</p>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; font-size:2.5rem; color:var(--accent2); padding-top:40px;">→</div>
+    <div class="card" style="flex:1; min-width:260px; border:1px solid var(--accent5);">
+      <h4 style="color:var(--accent5); margin-bottom:14px;"><i class="isax isax-cpu isax"></i> Agentic AI</h4>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; gap:10px; align-items:flex-start;"><i class="isax isax-tick-circle isax" style="color:var(--accent5);"></i><p style="font-size:0.95rem;">Searches the latest literature automatically</p></div>
+        <div style="display:flex; gap:10px; align-items:flex-start;"><i class="isax isax-tick-circle isax" style="color:var(--accent5);"></i><p style="font-size:0.95rem;">Reads and summarizes 20+ papers</p></div>
+        <div style="display:flex; gap:10px; align-items:flex-start;"><i class="isax isax-tick-circle isax" style="color:var(--accent5);"></i><p style="font-size:0.95rem;">Organizes references and identifies gaps</p></div>
+        <div style="display:flex; gap:10px; align-items:flex-start;"><i class="isax isax-tick-circle isax" style="color:var(--accent5);"></i><p style="font-size:0.95rem;">Suggests and writes the methodology</p></div>
+        <div style="display:flex; gap:10px; align-items:flex-start;"><i class="isax isax-tick-circle isax" style="color:var(--accent5);"></i><p style="font-size:0.95rem;">Prepares presentation slides</p></div>
+        <div style="display:flex; gap:10px; align-items:flex-start;"><i class="isax isax-tick-circle isax" style="color:var(--accent5);"></i><p style="font-size:0.95rem;">Formats citations in APA/IEEE automatically</p></div>
+      </div>
+      <div style="margin-top:16px; padding:10px; background:rgba(6,214,160,0.1); border-radius:8px;">
+        <p style="color:var(--accent5); font-size:0.9rem; font-weight:600;">You focus on ideas. Agent handles the process.</p>
+      </div>
+    </div>
+  </div>
+  <p style="margin-top:20px; color:var(--muted); font-size:0.95rem;"><i class="isax isax-lamp-on isax"></i> Relevant for every discipline: nursing, agriculture, law, education, engineering</p>
+</div>
+
+<!-- ============================================================ SLIDE 15 — REAL AGENTS EXIST -->
+<div class="slide slide-gradient-teal" id="s15">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">15 / 25</span>
+  <span class="tag"><i class="isax isax-global isax" style="font-size:0.9em;"></i> They Already Exist</span>
+  <h2>AI Agents <span class="highlight">Already in the Wild</span></h2>
+  <span class="accent-line"></span>
+  <p style="color:var(--muted); margin-top:4px; max-width:700px;">These are not science fiction. They're available right now.</p>
+  <div class="card-grid card-grid-4" style="margin-top:24px; max-width:1100px;">
+    <div class="card" style="text-align:center; padding:18px 12px;">
+      <i class="isax isax-code isax-lg"></i>
+      <h4>GitHub Copilot</h4>
+      <p style="color:var(--muted); font-size:0.8rem; margin-top:6px;">Writes, reviews &amp; explains code</p>
+    </div>
+    <div class="card" style="text-align:center; padding:18px 12px;">
+      <i class="isax isax-flash isax-lg"></i>
+      <h4>Cursor AI</h4>
+      <p style="color:var(--muted); font-size:0.8rem; margin-top:6px;">Full codebase agent — builds features</p>
+    </div>
+    <div class="card" style="text-align:center; padding:18px 12px;">
+      <i class="isax isax-microsoft isax-lg"></i>
+      <h4>Microsoft Copilot</h4>
+      <p style="color:var(--muted); font-size:0.8rem; margin-top:6px;">Works across Word, Excel, Teams, Outlook</p>
+    </div>
+    <div class="card" style="text-align:center; padding:18px 12px;">
+      <i class="isax isax-search-status-1 isax-lg"></i>
+      <h4>Perplexity AI</h4>
+      <p style="color:var(--muted); font-size:0.8rem; margin-top:6px;">Researches the web with citations</p>
+    </div>
+    <div class="card" style="text-align:center; padding:18px 12px;">
+      <i class="isax isax-cpu isax-lg"></i>
+      <h4>OpenAI Operator</h4>
+      <p style="color:var(--muted); font-size:0.8rem; margin-top:6px;">Browses websites, books, purchases</p>
+    </div>
+    <div class="card" style="text-align:center; padding:18px 12px;">
+      <i class="isax isax-code-1 isax-lg"></i>
+      <h4>Manus AI</h4>
+      <p style="color:var(--muted); font-size:0.8rem; margin-top:6px;">Complex autonomous task execution</p>
+    </div>
+    <div class="card" style="text-align:center; padding:18px 12px;">
+      <i class="isax isax-message-text isax-lg"></i>
+      <h4>Claude (Anthropic)</h4>
+      <p style="color:var(--muted); font-size:0.8rem; margin-top:6px;">Research, analysis, code, agentic tasks</p>
+    </div>
+    <div class="card" style="text-align:center; padding:18px 12px; background:rgba(108,99,255,0.1); border-color:var(--accent);">
+      <i class="isax isax-magic-star isax-lg" style="color:var(--accent2); animation:pulse 2s infinite;"></i>
+      <h4 style="color:var(--accent2);">Many More Coming</h4>
+      <p style="color:var(--muted); font-size:0.8rem; margin-top:6px;">This space is expanding every month</p>
+    </div>
+  </div>
+  <p style="margin-top:18px; color:var(--accent4); font-size:0.95rem; font-weight:600;"><i class="isax isax-flag isax"></i> And the opportunity to build Ugandan AI agents? Wide open.</p>
+</div>
+
+<!-- ============================================================ SLIDE 16 — THIS WEEK IN AGENTIC AI (newsletter) -->
+<div class="slide slide-gradient-purple" id="s16">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">16 / 25</span>
+  <span class="tag"><i class="isax isax-notification isax" style="font-size:0.9em;"></i> This Week in Agentic AI — Jul 17, 2026</span>
+  <h2>Agents Are <span class="highlight">Already Working</span> — Right Now</h2>
+  <span class="accent-line"></span>
+  <p style="color:var(--muted); margin-top:4px; max-width:800px; font-size:0.95rem; font-style:italic;">I received this newsletter in my inbox this morning. These are not demos. These are real results.</p>
+  <div class="card-grid card-grid-3" style="margin-top:20px; max-width:1100px;">
+    <div class="card" style="border-left:4px solid var(--accent4); text-align:left;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <i class="isax isax-people isax" style="font-size:1.6rem; color:var(--accent4);"></i>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--accent4); text-transform:uppercase; letter-spacing:0.06em;">Business</span>
+      </div>
+      <h4 style="color:var(--accent4); font-size:1rem;">Agent Runs Mom's Business</h4>
+      <p style="color:var(--muted); font-size:0.85rem; margin-top:8px; line-height:1.6;">Built in <strong style="color:var(--text);">10 days</strong> for a non-technical mother. Reads emails, finds leads, prices jobs, drafts estimates, creates payment links — owners approve every action via Telegram.</p>
+      <div style="margin-top:10px; padding:8px 12px; background:rgba(255,209,102,0.1); border-radius:8px;">
+        <p style="color:var(--accent4); font-size:0.82rem; font-weight:600;"><i class="isax isax-medal isax"></i> Won $5,000 at Hermes Agent Hackathon</p>
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent3); text-align:left;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <i class="isax isax-shield-tick isax" style="font-size:1.6rem; color:var(--accent3);"></i>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--accent3); text-transform:uppercase; letter-spacing:0.06em;">Finance &amp; Security</span>
+      </div>
+      <h4 style="color:var(--accent3); font-size:1rem;">AI Payment Kernel</h4>
+      <p style="color:var(--muted); font-size:0.85rem; margin-top:8px; line-height:1.6;">Sits between AI agents and real money. Approves or blocks spending, records receipts, has a kill switch — and <strong style="color:var(--text);">caught an agent rewriting its own policy</strong> to gain payment authority.</p>
+      <div style="margin-top:10px; padding:8px 12px; background:rgba(255,107,107,0.1); border-radius:8px;">
+        <p style="color:var(--accent3); font-size:0.82rem; font-weight:600;"><i class="isax isax-medal isax"></i> Won $10,000 — 1st Place</p>
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent5); text-align:left;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <i class="isax isax-bag isax" style="font-size:1.6rem; color:var(--accent5);"></i>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--accent5); text-transform:uppercase; letter-spacing:0.06em;">Commerce</span>
+      </div>
+      <h4 style="color:var(--accent5); font-size:1rem;">Photo to Full Sale</h4>
+      <p style="color:var(--muted); font-size:0.85rem; margin-top:8px; line-height:1.6;">Take a photo, give a one-line clue. The agent identifies the item, picks a marketplace, prices it, lists it, negotiates with buyers, holds payment, and releases funds after delivery.</p>
+      <div style="margin-top:10px; padding:8px 12px; background:rgba(6,214,160,0.1); border-radius:8px;">
+        <p style="color:var(--accent5); font-size:0.82rem; font-weight:600;"><i class="isax isax-medal isax"></i> Won $2,500 — 3rd Place</p>
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent2); text-align:left;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <i class="isax isax-video isax" style="font-size:1.6rem; color:var(--accent2);"></i>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--accent2); text-transform:uppercase; letter-spacing:0.06em;">Media &amp; Production</span>
+      </div>
+      <h4 style="color:var(--accent2); font-size:1rem;">Netflix Pushes AI Into Production</h4>
+      <p style="color:var(--muted); font-size:0.85rem; margin-top:8px; line-height:1.6;"><strong style="color:var(--text);">300+ titles</strong> used generative AI. One film used 17 min of AI-enhanced footage — produced <strong style="color:var(--text);">2× faster at half the cost.</strong> Complex crowd and battle scenes now accessible to any production.</p>
+    </div>
+    <div class="card" style="border-left:4px solid #c77dff; text-align:left;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <i class="isax isax-health isax" style="font-size:1.6rem; color:#c77dff;"></i>
+        <span style="font-size:0.75rem; font-weight:700; color:#c77dff; text-transform:uppercase; letter-spacing:0.06em;">Healthcare</span>
+      </div>
+      <h4 style="color:#c77dff; font-size:1rem;">UnitedHealth Rebuilds Around AI</h4>
+      <p style="color:var(--muted); font-size:0.85rem; margin-top:8px; line-height:1.6;">AI touches claims, prior authorizations, clinician notes, scheduling, HR, finance, and legal. <strong style="color:var(--text);">96% of AI-driven approvals</strong> cleared on first pass. Now packaging systems for other hospitals.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent); text-align:left; background:rgba(108,99,255,0.08);">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <i class="isax isax-lamp-on isax" style="font-size:1.6rem; color:var(--accent2);"></i>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--accent2); text-transform:uppercase; letter-spacing:0.06em;">The Lesson</span>
+      </div>
+      <h4 style="color:var(--accent2); font-size:1rem;">This Is Not the Future</h4>
+      <p style="color:var(--text); font-size:0.9rem; margin-top:8px; line-height:1.6;">These are not research papers. They are <strong>production systems running today</strong> — in business, healthcare, media, and commerce. The question is not <em>if</em> agents will matter. It is <em>who will build them.</em></p>
+    </div>
+  </div>
+  <p style="margin-top:14px; color:var(--muted); font-size:0.8rem;">Source: MyClaw Newsletter — July 17, 2026</p>
+</div>
+
+<!-- ============================================================ SLIDE 17 — AI IN EVERY FIELD (renumbered) -->
+<div class="slide slide-dark" id="s16">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">17 / 25</span>
+  <span class="tag"><i class="isax isax-global isax" style="font-size:0.9em;"></i> Every Discipline</span>
+  <h2>AI Agents Across <span class="highlight">Every Field</span></h2>
+  <span class="accent-line"></span>
+  <p style="color:var(--muted); margin-top:4px; font-size:1rem;">ATA: <em>"What course are you doing?"</em> — then explain the agent for their field</p>
+  <div class="sector-grid" style="margin-top:24px;">
+    <div class="sector-card"><i class="isax isax-book-1" style="font-size:1.8rem;"></i><h4 style="margin-top:10px;">Education</h4><p style="color:var(--muted); font-size:0.82rem; margin-top:6px;">Personal tutor, adaptive learning, exam prep assistant</p></div>
+    <div class="sector-card"><i class="isax isax-microscope" style="font-size:1.8rem;"></i><h4 style="margin-top:10px;">Research</h4><p style="color:var(--muted); font-size:0.82rem; margin-top:6px;">Literature review agent, citation manager, methodology suggester</p></div>
+    <div class="sector-card"><i class="isax isax-health" style="font-size:1.8rem;"></i><h4 style="margin-top:10px;">Medicine &amp; Health</h4><p style="color:var(--muted); font-size:0.82rem; margin-top:6px;">Patient support, clinical notes, appointment systems</p></div>
+    <div class="sector-card"><i class="isax isax-tree" style="font-size:1.8rem;"></i><h4 style="margin-top:10px;">Agriculture</h4><p style="color:var(--muted); font-size:0.82rem; margin-top:6px;">Crop advisor, weather analysis, market intelligence</p></div>
+    <div class="sector-card"><i class="isax isax-briefcase" style="font-size:1.8rem;"></i><h4 style="margin-top:10px;">Business</h4><p style="color:var(--muted); font-size:0.82rem; margin-top:6px;">Customer service bot, marketing agent, sales assistant</p></div>
+    <div class="sector-card"><i class="isax isax-judge" style="font-size:1.8rem;"></i><h4 style="margin-top:10px;">Law</h4><p style="color:var(--muted); font-size:0.82rem; margin-top:6px;">Document review, legal research, contract analysis</p></div>
+    <div class="sector-card"><i class="isax isax-buildings-2" style="font-size:1.8rem;"></i><h4 style="margin-top:10px;">Government</h4><p style="color:var(--muted); font-size:0.82rem; margin-top:6px;">Citizen services, policy research, information platforms</p></div>
+    <div class="sector-card"><i class="isax isax-brush-2" style="font-size:1.8rem;"></i><h4 style="margin-top:10px;">Media &amp; Arts</h4><p style="color:var(--muted); font-size:0.82rem; margin-top:6px;">Content creation, graphic design, video production</p></div>
+    <div class="sector-card"><i class="isax isax-cpu" style="font-size:1.8rem;"></i><h4 style="margin-top:10px;">Engineering</h4><p style="color:var(--muted); font-size:0.82rem; margin-top:6px;">Design assistant, simulation analysis, technical documentation</p></div>
+    <div class="sector-card"><i class="isax isax-document-text" style="font-size:1.8rem;"></i><h4 style="margin-top:10px;">Journalism</h4><p style="color:var(--muted); font-size:0.82rem; margin-top:6px;">Content research, fact-checking, article drafting</p></div>
+    <div class="sector-card"><i class="isax isax-people" style="font-size:1.8rem;"></i><h4 style="margin-top:10px;">Social Sciences</h4><p style="color:var(--muted); font-size:0.82rem; margin-top:6px;">Survey analysis, data interpretation, report writing</p></div>
+    <div class="sector-card" style="border-color:var(--accent2);"><i class="isax isax-lamp-on" style="font-size:1.8rem; color:var(--accent2);"></i><h4 style="margin-top:10px; color:var(--accent2);">Your Discipline?</h4><p style="color:var(--muted); font-size:0.82rem; margin-top:6px;">There's an agent waiting to be built for it</p></div>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 17 — UGANDA EXAMPLES -->
+<div class="slide slide-gradient-warm" id="s17">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">18 / 25</span>
+  <span class="tag">🇺🇬 Real Ugandan Examples</span>
+  <h2>AI Agents for <span class="highlight">Uganda's Challenges</span></h2>
+  <span class="accent-line"></span>
+  <div class="card-grid card-grid-2" style="max-width:1000px; margin-top:24px; text-align:left;">
+    <div class="card" style="border-left:4px solid var(--accent5);">
+      <h4 style="color:var(--accent5);"><i class="isax isax-tree isax"></i> Farmer in Kabale asks:</h4>
+      <p style="margin-top:10px; font-size:1rem; color:var(--text);">"When should I plant Irish potatoes this season?"</p>
+      <div style="margin-top:12px; display:flex; flex-direction:column; gap:6px;">
+        <p style="color:var(--muted); font-size:0.9rem;">→ Agent checks <strong style="color:var(--text);">weather forecast</strong> for Kabale region</p>
+        <p style="color:var(--muted); font-size:0.9rem;">→ Analyzes <strong style="color:var(--text);">soil moisture data</strong></p>
+        <p style="color:var(--muted); font-size:0.9rem;">→ Checks <strong style="color:var(--text);">current market prices</strong></p>
+        <p style="color:var(--muted); font-size:0.9rem;">→ Returns: <strong style="color:var(--accent5);">personalized planting schedule + crop recommendation</strong></p>
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent3);">
+      <h4 style="color:var(--accent3);"><i class="isax isax-hospital isax"></i> Patient at a clinic:</h4>
+      <p style="margin-top:10px; font-size:1rem; color:var(--text);">"I need to see a doctor this week"</p>
+      <div style="margin-top:12px; display:flex; flex-direction:column; gap:6px;">
+        <p style="color:var(--muted); font-size:0.9rem;">→ Agent finds <strong style="color:var(--text);">available doctors</strong></p>
+        <p style="color:var(--muted); font-size:0.9rem;">→ <strong style="color:var(--text);">Schedules appointment</strong> automatically</p>
+        <p style="color:var(--muted); font-size:0.9rem;">→ Creates <strong style="color:var(--text);">patient intake form</strong></p>
+        <p style="color:var(--muted); font-size:0.9rem;">→ Sends <strong style="color:var(--accent3);">SMS reminders</strong> in Luganda or Runyankole</p>
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent4);">
+      <h4 style="color:var(--accent4);"><i class="isax isax-teacher isax"></i> KAB student asks:</h4>
+      <p style="margin-top:10px; font-size:1rem; color:var(--text);">"What courses do I still need to graduate?"</p>
+      <div style="margin-top:12px; display:flex; flex-direction:column; gap:6px;">
+        <p style="color:var(--muted); font-size:0.9rem;">→ Reads <strong style="color:var(--text);">academic regulations</strong></p>
+        <p style="color:var(--muted); font-size:0.9rem;">→ Checks <strong style="color:var(--text);">student transcript</strong></p>
+        <p style="color:var(--muted); font-size:0.9rem;">→ Returns: <strong style="color:var(--accent4);">remaining courses + timetable suggestions</strong></p>
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent2);">
+      <h4 style="color:var(--accent2);"><i class="isax isax-buildings-2 isax"></i> Citizen asks URSB:</h4>
+      <p style="margin-top:10px; font-size:1rem; color:var(--text);">"How do I register my business in Uganda?"</p>
+      <div style="margin-top:12px; display:flex; flex-direction:column; gap:6px;">
+        <p style="color:var(--muted); font-size:0.9rem;">→ Agent explains <strong style="color:var(--text);">every step</strong></p>
+        <p style="color:var(--muted); font-size:0.9rem;">→ Lists <strong style="color:var(--text);">required documents</strong></p>
+        <p style="color:var(--muted); font-size:0.9rem;">→ Links to <strong style="color:var(--text);">online forms</strong></p>
+        <p style="color:var(--muted); font-size:0.9rem;">→ <strong style="color:var(--accent2);">Available 24/7, in local languages</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 18 — LIVE DEMO -->
+<div class="slide slide-surface" id="s18">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">19 / 25</span>
+  <span class="tag"><i class="isax isax-flash isax" style="font-size:0.9em;"></i> Live Demo — 10 Minutes</span>
+  <h2>See It <span class="highlight">In Action</span></h2>
+  <span class="accent-line"></span>
+  <!-- <p style="color:var(--muted); max-width:700px; margin-top:4px;">Switch to live browser — show the audience, don't just tell them</p> -->
+  <div class="card-grid card-grid-3" style="margin-top:28px; max-width:1000px; text-align:left;">
+    <div class="card" style="border-top:3px solid var(--accent4);">
+      <i class="isax isax-message-text isax-lg"></i>
+      <h4 style="color:var(--accent4);">Demo 1</h4>
+      <p style="font-weight:600; margin-top:10px;">ChatGPT — Multi-step planning</p>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px; line-height:1.7;">Ask: "Plan my week as an AI Club facilitator. I have sessions Tuesday and Friday, need to prepare slides, send reminders, and review student submissions."</p>
+      <p style="color:var(--accent4); font-size:0.85rem; margin-top:10px; font-weight:600;">Show: it coordinates multiple tasks, not just one answer</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent2);">
+      <i class="isax isax-search-zoom-in-1 isax-lg"></i>
+      <h4 style="color:var(--accent2);">Demo 2</h4>
+      <p style="font-weight:600; margin-top:10px;">AI Research Workflow</p>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px; line-height:1.7;">Prompt: "Research the latest AI Agent frameworks, summarize 5 key findings, organize them into a literature review outline, and suggest a research gap."</p>
+      <p style="color:var(--accent2); font-size:0.85rem; margin-top:10px; font-weight:600;">Show: multi-step reasoning, tool use, structured output</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent5);">
+      <i class="isax isax-code isax-lg"></i>
+      <h4 style="color:var(--accent5);">Demo 3</h4>
+      <p style="font-weight:600; margin-top:10px;">AI Code + Explain</p>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px; line-height:1.7;">Ask Copilot or Cursor to build a simple student registration form — show how it generates code, explains it, and suggests improvements automatically.</p>
+      <p style="color:var(--accent5); font-size:0.85rem; margin-top:10px; font-weight:600;">Show: AI as a builder, not just an answerer</p>
+    </div>
+  </div>
+  <div style="margin-top:22px; background:rgba(255,209,102,0.1); border:1px solid var(--accent4); border-radius:12px; padding:14px 28px; max-width:800px;">
+    <p style="color:var(--accent4); font-size:1rem;"><i class="isax isax-lamp-on isax"></i>"Notice how AI is coordinating multiple steps, not just responding to one prompt. That's the agent difference."</p>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 19 — FUTURE JOBS -->
+<div class="slide slide-gradient-blue" id="s19">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">20 / 25</span>
+  <span class="tag"><i class="isax isax-briefcase isax" style="font-size:0.9em;"></i> Careers — 10 Minutes</span>
+  <h2>What About <span class="highlight">Our Jobs?</span></h2>
+  <span class="accent-line"></span>
+  <div style="display:flex; gap:30px; max-width:1000px; margin-top:24px; flex-wrap:wrap; justify-content:center;">
+    <div class="card" style="flex:1; min-width:260px; text-align:center; border:1px solid var(--accent3);">
+      <i class="isax isax-close-circle isax-xxl" style="display:block; margin-bottom:10px; color:var(--accent3);"></i>
+      <h3 style="margin-top:14px; color:var(--accent3);">Jobs disappearing?</h3>
+      <p style="color:var(--muted); margin-top:12px; line-height:1.7;">Not exactly. The conversation is more nuanced than headlines suggest.</p>
+    </div>
+    <div class="card" style="flex:1; min-width:260px; text-align:center; border:1px solid var(--accent4);">
+      <i class="isax isax-repeat isax-xxl" style="display:block; margin-bottom:10px; color:var(--accent4);"></i>
+      <h3 style="margin-top:14px; color:var(--accent4);">Jobs changing?</h3>
+      <p style="color:var(--muted); margin-top:12px; line-height:1.7;">Absolutely. Every role is evolving. The tools are different. The expectations are higher.</p>
+    </div>
+    <div class="card" style="flex:1; min-width:260px; text-align:center; border:1px solid var(--accent5);">
+      <i class="isax isax-rocket isax-xxl" style="display:block; animation:float 3s ease-in-out infinite; color:var(--accent5);"></i>
+      <h3 style="margin-top:14px; color:var(--accent5);">New opportunities?</h3>
+      <p style="color:var(--muted); margin-top:12px; line-height:1.7;">Massively. Prompt engineers, AI trainers, agent designers, AI ethicists didn't exist 5 years ago.</p>
+    </div>
+  </div>
+  <div style="margin-top:32px; max-width:750px;">
+    <div class="big-quote" style="font-size:clamp(1.1rem,2.2vw,1.7rem);">
+      Artificial Intelligence will not replace people.<br/>
+      <strong>People who know how to work with AI will replace those who don't.</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 20 — SKILLS THAT MATTER -->
+<div class="slide slide-dark" id="s20">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">21 / 25</span>
+  <span class="tag"><i class="isax isax-target isax" style="font-size:0.9em;"></i> The Skills That Matter</span>
+  <h2>What You Need to <span class="highlight">Thrive</span> in the AI Era</h2>
+  <span class="accent-line"></span>
+  <p style="color:var(--muted); margin-top:4px; max-width:700px; font-style:italic; font-size:1rem;">"Programming is becoming less important than understanding problems." — Let that sink in.</p>
+  <div class="skills-wrap" style="margin-top:28px;">
+    <span class="skill-pill" style="background:rgba(108,99,255,0.15); border-color:var(--accent); color:var(--text);"><i class="isax isax-brain isax"></i> Critical Thinking</span>
+    <span class="skill-pill" style="background:rgba(0,212,255,0.1); border-color:var(--accent2); color:var(--text);"><i class="isax isax-message-text isax"></i> Communication</span>
+    <span class="skill-pill" style="background:rgba(255,209,102,0.1); border-color:var(--accent4); color:var(--text);"><i class="isax isax-brush-2 isax"></i> Creativity</span>
+    <span class="skill-pill" style="background:rgba(6,214,160,0.1); border-color:var(--accent5); color:var(--text);"><i class="isax isax-search-zoom-in-1 isax"></i> Problem Solving</span>
+    <span class="skill-pill" style="background:rgba(108,99,255,0.15); border-color:var(--accent); color:var(--text);"><i class="isax isax-edit-2 isax"></i> Prompt Engineering</span>
+    <span class="skill-pill" style="background:rgba(0,212,255,0.1); border-color:var(--accent2); color:var(--text);"><i class="isax isax-map-1 isax"></i> Workflow Design</span>
+    <span class="skill-pill" style="background:rgba(255,107,107,0.1); border-color:var(--accent3); color:var(--text);"><i class="isax isax-judge isax"></i> Ethics &amp; Responsibility</span>
+    <span class="skill-pill" style="background:rgba(255,209,102,0.1); border-color:var(--accent4); color:var(--text);"><i class="isax isax-book-1 isax"></i> Domain Knowledge</span>
+    <span class="skill-pill" style="background:rgba(6,214,160,0.1); border-color:var(--accent5); color:var(--text);"><i class="isax isax-cpu isax"></i> AI Literacy</span>
+    <span class="skill-pill" style="background:rgba(108,99,255,0.15); border-color:var(--accent); color:var(--text);"><i class="isax isax-people isax"></i> Human-AI Collaboration</span>
+  </div>
+  <div style="margin-top:30px; display:flex; gap:20px; flex-wrap:wrap; justify-content:center; max-width:900px;">
+    <div class="card" style="flex:1; min-width:240px; padding:18px 20px; text-align:left;">
+      <h4 style="color:var(--accent3);"><i class="isax isax-close-circle isax"></i> Becoming Less Critical</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">Memorizing syntax · Repetitive data entry · Copy-paste report writing · Basic coding tasks</p>
+    </div>
+    <div class="card" style="flex:1; min-width:240px; padding:18px 20px; text-align:left; border-color:var(--accent5);">
+      <h4 style="color:var(--accent5);"><i class="isax isax-tick-circle isax"></i> Becoming More Valuable</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">Asking great questions · Designing systems · Leading with domain expertise · Evaluating AI output</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 21 — RESPONSIBLE AI -->
+<div class="slide slide-gradient-warm" id="s21">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">22 / 25</span>
+  <span class="tag"><i class="isax isax-judge isax" style="font-size:0.9em;"></i> Responsibility Matters</span>
+  <h2>Responsible <span class="highlight">AI</span> — We Can't Skip This</h2>
+  <span class="accent-line"></span>
+  <p style="color:var(--muted); max-width:700px; margin-top:4px;">AI Agents are powerful. Powerful tools need responsible hands.</p>
+  <div class="card-grid card-grid-3" style="max-width:960px; margin-top:24px;">
+    <div class="card" style="border-top:3px solid var(--accent3); text-align:center;">
+      <i class="isax isax-warning-2 isax-lg" style="color:var(--accent3);"></i>
+      <h4 style="color:var(--accent3);">Bias</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">AI trained on biased data produces biased results. Whose data? Whose voice?</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent4); text-align:center;">
+      <i class="isax isax-lock isax-lg" style="color:var(--accent4);"></i>
+      <h4 style="color:var(--accent4);">Privacy</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">What data does the agent collect? Who owns it? Is it stored securely?</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent2); text-align:center;">
+      <i class="isax isax-shield-tick isax-lg" style="color:var(--accent2);"></i>
+      <h4 style="color:var(--accent2);">Security</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">Agents with access to email, files, and systems can be exploited if not secured.</p>
+    </div>
+    <div class="card" style="border-top:3px solid #c77dff; text-align:center;">
+      <i class="isax isax-danger isax-lg" style="color:#c77dff;"></i>
+      <h4 style="color:#c77dff;">Hallucinations</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">AI can confidently give wrong answers. Always verify critical information.</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent5); text-align:center;">
+      <i class="isax isax-eye isax-lg" style="color:var(--accent5);"></i>
+      <h4 style="color:var(--accent5);">Human Oversight</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">For high-stakes decisions — health, law, finance — humans must stay in the loop.</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent); text-align:center;">
+      <i class="isax isax-global isax-lg" style="color:var(--accent);"></i>
+      <h4 style="color:var(--accent);">Transparency</h4>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:8px;">Users should know when they're talking to AI. No deceptive agents.</p>
+    </div>
+  </div>
+  <div style="margin-top:22px; background:rgba(6,214,160,0.08); border:1px solid var(--accent5); border-radius:12px; padding:14px 28px; max-width:700px;">
+    <p style="color:var(--accent5); font-size:1rem; font-weight:600;">AI should assist — not replace — human judgment and human dignity.</p>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 22 — GROUP ACTIVITY -->
+<div class="slide slide-gradient-purple" id="s22">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">23 / 25</span>
+  <span class="tag"><i class="isax isax-target isax" style="font-size:0.9em;"></i> Group Activity — 8 Minutes</span>
+  <h2>Design Your Own <span class="highlight">AI Agent</span></h2>
+  <span class="accent-line"></span>
+  <p style="color:var(--muted); margin-top:4px; max-width:700px;">Pick any discipline. Think about a real problem you face.</p>
+  <div class="card-grid card-grid-2" style="max-width:860px; margin-top:24px; text-align:left;">
+    <div class="card" style="border-left:4px solid var(--accent4);">
+      <h4 style="color:var(--accent4);"><i class="isax isax-message-question isax"></i> Question 1</h4>
+      <p style="margin-top:10px; font-size:1.1rem;">What <strong>problem</strong> are you solving?</p>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:6px;">Be specific. "Students at KAB struggle to track their course requirements."</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent2);">
+      <h4 style="color:var(--accent2);"><i class="isax isax-message-question isax"></i> Question 2</h4>
+      <p style="margin-top:10px; font-size:1.1rem;">Who <strong>uses</strong> this agent?</p>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:6px;">Student? Farmer? Doctor? Community leader? Government official?</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent5);">
+      <h4 style="color:var(--accent5);"><i class="isax isax-message-question isax"></i> Question 3</h4>
+      <p style="margin-top:10px; font-size:1.1rem;">What <strong>tools</strong> does it use?</p>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:6px;">Web search? Database? Calendar? SMS? Maps? Calculations?</p>
+    </div>
+    <div class="card" style="border-left:4px solid #c77dff;">
+      <h4 style="color:#c77dff;"><i class="isax isax-message-question isax"></i> Question 4</h4>
+      <p style="margin-top:10px; font-size:1.1rem;">What <strong>value</strong> does it create?</p>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:6px;">Saves time? Saves money? Improves outcomes? Increases access?</p>
+    </div>
+  </div>
+  <div style="margin-top:24px; background:rgba(108,99,255,0.1); border:1px solid var(--accent); border-radius:12px; padding:14px 28px; max-width:700px;">
+    <p style="color:var(--accent2); font-size:1rem;"><i class="isax isax-timer isax"></i> 8 minutes — then 2 groups share with the room</p>
+  </div>
+  <p style="margin-top:16px; color:var(--muted); font-size:0.9rem;"><i class="isax isax-lamp-on isax"></i> This is exactly what Week 11 AI Innovation Challenge looks like — start practicing now!</p>
+</div>
+
+<!-- ============================================================ SLIDE 23 — SEMESTER JOURNEY -->
+<div class="slide slide-dark" id="s23">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">24 / 25</span>
+  <span class="tag"><i class="isax isax-calendar-1 isax" style="font-size:0.9em;"></i> What's Coming</span>
+  <h2>Your Semester <span class="highlight">Journey</span></h2>
+  <span class="accent-line"></span>
+  <p style="color:var(--muted); margin-top:4px; max-width:700px;">12 weeks. 4 phases. One destination: building real AI solutions for real problems.</p>
+  <div style="display:flex; gap:16px; max-width:1100px; margin-top:28px; flex-wrap:wrap; justify-content:center;">
+    <div class="card" style="flex:1; min-width:200px; border-top:4px solid var(--accent); text-align:left;">
+      <div style="display:flex; align-items:center; gap:10px;"><span style="background:var(--accent); color:white; padding:2px 10px; border-radius:50px; font-size:0.8rem; font-weight:700;">Phase I</span><span style="color:var(--muted); font-size:0.8rem;">Weeks 1–2</span></div>
+      <h4 style="margin-top:10px; font-size:0.95rem;">Understanding the Agentic Revolution</h4>
+      <div style="margin-top:10px; display:flex; flex-direction:column; gap:4px;">
+        <p style="color:var(--muted); font-size:0.82rem;"><i class="isax isax-location isax"></i> <strong style="color:var(--text);">Week 1</strong> — AI Beyond Code (Today!)</p>
+        <p style="color:var(--muted); font-size:0.82rem;"><i class="isax isax-location isax"></i> <strong style="color:var(--text);">Week 2</strong> — Inside an AI Agent</p>
+      </div>
+    </div>
+    <div class="card" style="flex:1; min-width:200px; border-top:4px solid var(--accent2); text-align:left;">
+      <div style="display:flex; align-items:center; gap:10px;"><span style="background:var(--accent2); color:#0a0e1a; padding:2px 10px; border-radius:50px; font-size:0.8rem; font-weight:700;">Phase II</span><span style="color:var(--muted); font-size:0.8rem;">Weeks 3–7</span></div>
+      <h4 style="margin-top:10px; font-size:0.95rem;">AI Agents Across Industries</h4>
+      <div style="margin-top:10px; display:flex; flex-direction:column; gap:4px;">
+        <p style="color:var(--muted); font-size:0.82rem;"><i class="isax isax-teacher isax"></i> Education &amp; Research</p>
+        <p style="color:var(--muted); font-size:0.82rem;"><i class="isax isax-briefcase isax"></i> Business &amp; Entrepreneurship</p>
+        <p style="color:var(--muted); font-size:0.82rem;"><i class="isax isax-health isax"></i> Healthcare · <i class="isax isax-tree isax"></i> Agriculture</p>
+        <p style="color:var(--muted); font-size:0.82rem;"><i class="isax isax-buildings-2 isax"></i> Government &amp; Society</p>
+      </div>
+    </div>
+    <div class="card" style="flex:1; min-width:200px; border-top:4px solid var(--accent5); text-align:left;">
+      <div style="display:flex; align-items:center; gap:10px;"><span style="background:var(--accent5); color:#0a0e1a; padding:2px 10px; border-radius:50px; font-size:0.8rem; font-weight:700;">Phase III</span><span style="color:var(--muted); font-size:0.8rem;">Weeks 8–10</span></div>
+      <h4 style="margin-top:10px; font-size:0.95rem;">Creating with AI</h4>
+      <div style="margin-top:10px; display:flex; flex-direction:column; gap:4px;">
+        <p style="color:var(--muted); font-size:0.82rem;"><i class="isax isax-brush-2 isax"></i> AI for Creativity &amp; Media</p>
+        <p style="color:var(--muted); font-size:0.82rem;"><i class="isax isax-briefcase isax"></i> AI for Careers</p>
+        <p style="color:var(--muted); font-size:0.82rem;"><i class="isax isax-setting-2 isax"></i> Build AI Without Heavy Coding</p>
+      </div>
+    </div>
+    <div class="card" style="flex:1; min-width:200px; border-top:4px solid var(--accent4); text-align:left;">
+      <div style="display:flex; align-items:center; gap:10px;"><span style="background:var(--accent4); color:#0a0e1a; padding:2px 10px; border-radius:50px; font-size:0.8rem; font-weight:700;">Phase IV</span><span style="color:var(--muted); font-size:0.8rem;">Weeks 11–12</span></div>
+      <h4 style="margin-top:10px; font-size:0.95rem;">Innovation &amp; Impact</h4>
+      <div style="margin-top:10px; display:flex; flex-direction:column; gap:4px;">
+        <p style="color:var(--muted); font-size:0.82rem;"><i class="isax isax-cup isax"></i> AI Innovation Challenge</p>
+        <p style="color:var(--muted); font-size:0.82rem;"><i class="isax isax-microphone isax"></i> AI Agent Showcase &amp; Demo Day</p>
+        <p style="color:var(--accent4); font-size:0.82rem; font-weight:600;"><i class="isax isax-medal isax"></i> Awards &amp; Prizes</p>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:22px; background:rgba(108,99,255,0.1); border:1px solid var(--accent); border-radius:12px; padding:12px 24px; max-width:700px;">
+    <p style="color:var(--accent2); font-size:0.95rem;"><i class="isax isax-lamp-on isax"></i> No prior coding experience needed for most of this. Your domain knowledge is the most valuable thing you bring.</p>
+  </div>
+</div>
+
+<!-- ============================================================ SLIDE 24 — CLOSING -->
+<div class="slide slide-gradient-purple" id="s24">
+  <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
+  <span class="slide-num">25 / 25</span>
+  <div style="max-width:850px;">
+    <span class="tag"><i class="isax isax-magic-star isax" style="font-size:0.9em;"></i> Closing</span>
+    <h1 style="font-size:clamp(2rem,5vw,3.8rem); line-height:1.2;">AI is No Longer About <span class="highlight">Coding</span></h1>
+    <span class="accent-line"></span>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:24px; max-width:700px;">
+      <div style="text-align:left; padding:16px 20px; background:rgba(108,99,255,0.1); border:1px solid var(--accent); border-radius:12px;">
+        <i class="isax isax-brain isax" style="font-size:1.5rem;"></i>
+        <p style="font-size:1.05rem; font-weight:600; margin-top:8px;">Thinking Better</p>
+      </div>
+      <div style="text-align:left; padding:16px 20px; background:rgba(0,212,255,0.08); border:1px solid var(--accent2); border-radius:12px;">
+        <i class="isax isax-flash isax" style="font-size:1.5rem;"></i>
+        <p style="font-size:1.05rem; font-weight:600; margin-top:8px;">Working Smarter</p>
+      </div>
+      <div style="text-align:left; padding:16px 20px; background:rgba(6,214,160,0.08); border:1px solid var(--accent5); border-radius:12px;">
+        <i class="isax isax-cpu isax" style="font-size:1.5rem;"></i>
+        <p style="font-size:1.05rem; font-weight:600; margin-top:8px;">Building Faster</p>
+      </div>
+      <div style="text-align:left; padding:16px 20px; background:rgba(255,209,102,0.08); border:1px solid var(--accent4); border-radius:12px;">
+        <i class="isax isax-global isax" style="font-size:1.5rem;"></i>
+        <p style="font-size:1.05rem; font-weight:600; margin-top:8px;">Solving Bigger Problems</p>
+      </div>
+    </div>
+    <div style="margin-top:36px; padding:24px 32px; background:rgba(255,255,255,0.03); border:1px solid rgba(108,99,255,0.4); border-radius:16px; max-width:720px;">
+      <p class="big-quote" style="font-size:clamp(1rem,2vw,1.4rem); padding:0 30px;">This semester isn't about learning another technology.<br/>It's about learning a <strong>new way of thinking</strong> and <strong>solving problems.</strong></p>
+    </div>
+    <div style="margin-top:32px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+      <span class="skill-pill" style="background:rgba(108,99,255,0.15); border-color:var(--accent); font-size:1rem; padding:12px 24px;"><i class="isax isax-message-question isax"></i> Questions?</span>
+      <span class="skill-pill" style="background:rgba(6,214,160,0.1); border-color:var(--accent5); font-size:1rem; padding:12px 24px;"><i class="isax isax-message-text isax"></i> Discussion open</span>
+      <span class="skill-pill" style="background:rgba(255,209,102,0.1); border-color:var(--accent4); font-size:1rem; padding:12px 24px;"><i class="isax isax-rocket isax"></i> See you Week 2!</span>
+    </div>
+    <p style="margin-top:22px; color:var(--muted); font-size:0.9rem;">IndabaX AI Club · Kabale University · Semester Program 2026</p>
+  </div>
+</div>
+
+</div><!-- end #deck -->
+
+<!-- ===== PROGRESS BAR ===== -->
+<div id="progress-bar"></div>
+
+<!-- ===== NAVIGATION ===== -->
+<div id="nav">
+  <button class="nav-btn" id="btn-prev" onclick="changeSlide(-1)" title="Previous (←)">&#8592;</button>
+  <span id="slide-counter">1 / 25</span>
+  <button class="nav-btn" id="btn-next" onclick="changeSlide(1)" title="Next (→)">&#8594;</button>
+  <button class="nav-btn" onclick="toggleFullscreen()" title="Fullscreen (F)" style="font-size:0.9rem;"><i class="isax isax-maximize-2 isax"></i></button>
+</div>
+
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function showSlide(index) {
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit');
+    setTimeout(() => slides[current].classList.remove('exit'), 550);
+    current = (index + total) % total;
+    slides[current].classList.add('active');
+    document.getElementById('slide-counter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('progress-bar').style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  function changeSlide(dir) { showSlide(current + dir); }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault(); changeSlide(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault(); changeSlide(-1);
+    } else if (e.key === 'f' || e.key === 'F') {
+      toggleFullscreen();
+    } else if (e.key === 'Home') {
+      e.preventDefault(); showSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault(); showSlide(total - 1);
+    }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) changeSlide(dx < 0 ? 1 : -1);
+  });
+
+  // Fullscreen
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  }
+
+  // Init progress bar
+  document.getElementById('progress-bar').style.width = (1 / total * 100) + '%';
+</script>
+</body>
+</html>
