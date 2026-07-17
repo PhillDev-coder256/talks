@@ -210,19 +210,18 @@ history = [{<span style="color:#a5d6ff;">"role"</span>: <span style="color:#a5d6
     <div class="chat-demo" style="max-width:700px;">
       <div class="chat-header">
         <div class="chat-dot"></div>
-        <span style="font-weight:600; font-size:0.95rem;">KAB Study Assistant</span>
-        <span style="color:var(--muted); font-size:0.8rem; margin-left:auto;">Powered by Groq · Llama 3</span>
+        <span style="font-weight:600; font-size:0.95rem;">IndabaX AI Club Support Assistant</span>
+        <span style="color:var(--muted); font-size:0.8rem; margin-left:auto;">Powered by Groq · Llama 3.3 · Live</span>
       </div>
-      <div class="chat-messages" id="chat-messages">
-        <div class="msg msg-agent"><strong>Agent:</strong> Hello! I'm your AI study assistant for the IndabaX AI session. Ask me anything about AI agents, the Agentic Era, or how to build your first agent. What would you like to know?</div>
-      </div>
-      <div class="chat-input-row">
-        <input id="chat-input" type="text" placeholder="Ask something about AI agents…" onkeydown="if(event.key==='Enter') sendMessage()"/>
-        <button id="chat-send" onclick="sendMessage()">Send</button>
-      </div>
+      <!-- Embed the real n8n chat directly -->
+      <iframe
+        src="https://philldevcoder.app.n8n.cloud/webhook/727310be-2ccb-4d3a-b133-ac867161284e/chat"
+        style="width:100%; height:480px; border:none; border-radius:0 0 14px 14px;"
+        title="IndabaX AI Club Support Assistant">
+      </iframe>
     </div>
     <div class="info-box" style="max-width:700px; margin-top:12px;">
-      <p><strong>Note:</strong> This live demo uses a public Groq endpoint. For production use, always keep your API key server-side and never expose it in frontend code.</p>
+      <p><strong>This is the real agent</strong> — built in n8n, running Llama 3.3 via Groq, with conversation memory. It was built live during the IndabaX AI Club session on July 17, 2026. You can build one exactly like it using the steps above.</p>
     </div>
   </div>
 
@@ -258,7 +257,7 @@ history = [{<span style="color:#a5d6ff;">"role"</span>: <span style="color:#a5d6
 </footer>
 
 <script>
-  // Simple copy button
+  // Copy button
   function copyCode() {
     const code = document.getElementById('agent-code').innerText;
     navigator.clipboard.writeText(code).then(() => {
@@ -266,53 +265,6 @@ history = [{<span style="color:#a5d6ff;">"role"</span>: <span style="color:#a5d6
       btn.innerHTML = '<i class="isax isax-tick-circle isax"></i> Copied!';
       setTimeout(() => { btn.innerHTML = '<i class="isax isax-copy isax"></i> Copy Code'; }, 2000);
     });
-  }
-
-  // Live chat demo — uses a CORS proxy to Groq
-  // Students should replace this with their own backend in production
-  const GROQ_API_KEY = ""; // Leave empty — demo uses simulated responses for the page
-  const messages = [
-    { role: "system", content: "You are a helpful and enthusiastic study assistant for IndabaX AI Club at Kabale University. You explain AI concepts clearly using examples from Uganda and Africa. Keep answers concise (2-4 sentences max) and encouraging." }
-  ];
-
-  // Simulated responses for demo (no API key needed on the page)
-  const simulatedResponses = {
-    default: [
-      "Great question! An AI agent is different from a regular chatbot because it has goals, memory, and can take actions — not just answer questions. Think of it as the difference between a calculator and a research assistant.",
-      "Exactly the right thing to think about! In Uganda, we could build agents for crop advisory (checking weather + soil data), patient triage at clinics, or helping citizens navigate government services — all real needs, all buildable with the tools we discussed today.",
-      "The key insight is this: the 'memory' in an AI agent is just a list of past messages. Every time the agent responds, it reads the full conversation history. That's how it 'remembers' what you said earlier.",
-      "A system prompt is like a job description for your agent. It tells the model who it is, what it can and can't do, and how it should behave. Change the system prompt and you have a completely different agent.",
-      "The Groq API is free and gives you access to Llama 3.3 — one of the best open models available. You can make 100s of calls per day for free, which is more than enough to build and test your first agent."
-    ]
-  };
-
-  let responseIndex = 0;
-
-  function sendMessage() {
-    const input = document.getElementById('chat-input');
-    const text = input.value.trim();
-    if (!text) return;
-
-    const messagesDiv = document.getElementById('chat-messages');
-    messagesDiv.innerHTML += `<div class="msg msg-user">${text}</div>`;
-    input.value = '';
-    document.getElementById('chat-send').disabled = true;
-
-    const typing = document.createElement('div');
-    typing.className = 'msg msg-agent';
-    typing.id = 'typing';
-    typing.innerHTML = '<strong>Agent:</strong> <em style="color:var(--muted);">thinking…</em>';
-    messagesDiv.appendChild(typing);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-    setTimeout(() => {
-      const responses = simulatedResponses.default;
-      const reply = responses[responseIndex % responses.length];
-      responseIndex++;
-      document.getElementById('typing').innerHTML = `<strong>Agent:</strong> ${reply}`;
-      document.getElementById('chat-send').disabled = false;
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }, 1200);
   }
 </script>
 </body>
