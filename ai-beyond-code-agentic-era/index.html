@@ -1329,28 +1329,69 @@ history = [{
 </div>
 
 <!-- ============================================================ SLIDE 26 — LIVE AGENT DEMO -->
-<div class="slide slide-dark" id="s-live-agent" style="padding:0;">
+<div class="slide slide-gradient-teal" id="s-live-agent">
   <img src="indabaxlogo.png" class="logo-top" alt="IndabaX Logo"/>
-  <span class="slide-num" style="z-index:10;">26 / 28</span>
-  <!-- top label bar -->
-  <div style="position:absolute; top:0; left:0; right:0; height:56px; background:rgba(10,14,26,0.95); border-bottom:1px solid rgba(108,99,255,0.3); display:flex; align-items:center; padding:0 80px 0 140px; gap:16px; z-index:5; flex-shrink:0;">
-    <span style="display:inline-flex; align-items:center; gap:6px; padding:4px 14px; border-radius:50px; font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; background:rgba(6,214,160,0.15); border:1px solid var(--accent5); color:var(--accent5);">
-      <span style="width:8px; height:8px; border-radius:50%; background:var(--accent5); animation:pulse 2s infinite; display:inline-block;"></span>
-      Live Agent
-    </span>
-    <span style="font-weight:700; font-size:1rem; color:var(--text);">IndabaX AI Club Support Assistant</span>
-    <span style="color:var(--muted); font-size:0.82rem;">Powered by Groq · Llama 3.3 · Built with n8n — ask it anything</span>
-  </div>
-  <!-- iframe fills the rest -->
-  <iframe
-    src="https://philldevcoder.app.n8n.cloud/webhook/727310be-2ccb-4d3a-b133-ac867161284e/chat"
-    style="position:absolute; top:56px; left:0; right:0; bottom:60px; width:100%; border:none;"
-    title="IndabaX AI Club Support Assistant — Live Agent">
-  </iframe>
-  <!-- bottom note -->
-  <div style="position:absolute; bottom:0; left:0; right:0; height:60px; background:rgba(10,14,26,0.95); border-top:1px solid rgba(108,99,255,0.2); display:flex; align-items:center; justify-content:center; gap:24px; z-index:5;">
-    <span style="color:var(--muted); font-size:0.8rem;"><i class="isax isax-lamp-on isax"></i> &nbsp;This is a real AI Agent — built in n8n, running Llama 3.3 via Groq, with memory</span>
-    <span style="color:var(--accent2); font-size:0.8rem; font-family:monospace;">philldevcoder.app.n8n.cloud/webhook/727310be.../chat</span>
+  <span class="slide-num">26 / 28</span>
+  <span class="tag" style="background:rgba(6,214,160,0.15); border-color:var(--accent5); color:var(--accent5);">
+    <span style="width:8px; height:8px; border-radius:50%; background:var(--accent5); animation:pulse 2s infinite; display:inline-block; margin-right:6px;"></span>
+    Live Agent — Running Now
+  </span>
+  <h2>Meet Your <span class="highlight">IndabaX AI Club</span> Support Assistant</h2>
+  <span class="accent-line"></span>
+  <p style="color:var(--muted); max-width:700px; margin-top:4px; font-size:1rem;">
+    Built live today — n8n + Groq + Llama 3.3 + Memory. This is a real AI Agent, not a demo.
+  </p>
+
+  <div style="display:flex; gap:24px; max-width:900px; margin-top:32px; flex-wrap:wrap; justify-content:center; align-items:stretch;">
+    <!-- What it can do -->
+    <div class="card" style="flex:1; min-width:260px; text-align:left; border-top:3px solid var(--accent5);">
+      <h4 style="color:var(--accent5); margin-bottom:14px;"><i class="isax isax-cpu isax"></i> What this agent does</h4>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; gap:10px;"><i class="isax isax-tick-circle isax" style="color:var(--accent5); margin-top:2px;"></i><p style="font-size:0.9rem; color:var(--muted);">Answers questions about AI Agents and the Agentic Era</p></div>
+        <div style="display:flex; gap:10px;"><i class="isax isax-tick-circle isax" style="color:var(--accent5); margin-top:2px;"></i><p style="font-size:0.9rem; color:var(--muted);">Remembers your conversation context within a session</p></div>
+        <div style="display:flex; gap:10px;"><i class="isax isax-tick-circle isax" style="color:var(--accent5); margin-top:2px;"></i><p style="font-size:0.9rem; color:var(--muted);">Runs the IndabaX AI Club persona — built with your system prompt</p></div>
+        <div style="display:flex; gap:10px;"><i class="isax isax-tick-circle isax" style="color:var(--accent5); margin-top:2px;"></i><p style="font-size:0.9rem; color:var(--muted);">Powered by Llama 3.3-70b via Groq — completely free to run</p></div>
+      </div>
+      <div style="margin-top:16px; padding:10px 14px; background:rgba(6,214,160,0.08); border-radius:8px; border:1px solid rgba(6,214,160,0.2);">
+        <p style="font-size:0.82rem; color:var(--accent5); font-weight:600;"><i class="isax isax-setting-2 isax"></i> &nbsp;Stack: n8n · Groq API · Llama 3.3 · Window Memory</p>
+      </div>
+    </div>
+
+    <!-- The link + button -->
+    <div class="card" style="flex:1; min-width:260px; text-align:center; border-top:3px solid var(--accent2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px;">
+      <i class="isax isax-message-text isax" style="font-size:3rem; color:var(--accent2);"></i>
+      <div>
+        <p style="color:var(--muted); font-size:0.85rem; margin-bottom:8px;">Open the live agent in your browser:</p>
+        <p style="font-family:monospace; font-size:0.8rem; color:var(--text); background:rgba(0,0,0,0.3); padding:8px 14px; border-radius:8px; word-break:break-all; border:1px solid var(--border);">philldevcoder.app.n8n.cloud/<br/>webhook/727310be.../chat</p>
+      </div>
+      <a href="https://philldevcoder.app.n8n.cloud/webhook/727310be-2ccb-4d3a-b133-ac867161284e/chat"
+         target="_blank"
+         style="display:inline-flex; align-items:center; gap:10px; background:linear-gradient(135deg, var(--accent5), var(--accent2)); color:#0a0e1a; padding:16px 36px; border-radius:14px; font-weight:800; font-size:1.1rem; text-decoration:none; box-shadow:0 4px 20px rgba(6,214,160,0.4); transition:transform 0.2s;"
+         onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+        <i class="isax isax-export isax"></i>
+        Open Live Agent
+      </a>
+      <p style="color:var(--muted); font-size:0.78rem;">Opens in a new tab — works on phone and laptop</p>
+    </div>
+
+    <!-- Try it prompts -->
+    <div class="card" style="flex:1; min-width:220px; text-align:left; border-top:3px solid var(--accent4);">
+      <h4 style="color:var(--accent4); margin-bottom:14px;"><i class="isax isax-message-question isax"></i> Try asking it:</h4>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="padding:8px 12px; background:rgba(255,209,102,0.08); border-radius:8px; border:1px solid rgba(255,209,102,0.2);">
+          <p style="font-size:0.85rem; color:var(--text); font-style:italic;">"What is an AI Agent?"</p>
+        </div>
+        <div style="padding:8px 12px; background:rgba(255,209,102,0.08); border-radius:8px; border:1px solid rgba(255,209,102,0.2);">
+          <p style="font-size:0.85rem; color:var(--text); font-style:italic;">"How can AI help Ugandan farmers?"</p>
+        </div>
+        <div style="padding:8px 12px; background:rgba(255,209,102,0.08); border-radius:8px; border:1px solid rgba(255,209,102,0.2);">
+          <p style="font-size:0.85rem; color:var(--text); font-style:italic;">"What skills do I need for the AI era?"</p>
+        </div>
+        <div style="padding:8px 12px; background:rgba(255,209,102,0.08); border-radius:8px; border:1px solid rgba(255,209,102,0.2);">
+          <p style="font-size:0.85rem; color:var(--text); font-style:italic;">"How do I build an agent like this?"</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
