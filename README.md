@@ -10,7 +10,7 @@ Each talk is a self-contained HTML presentation with keyboard/touch navigation a
 
 | # | Talk | Event | Date |
 |---|------|-------|------|
-| 01 | [AI Beyond Code: Entering the Agentic Era](https://philldevcoder.github.io/talks/index.html) | IndabaX AI Club · Kabale University | July 2026 |
+| 01 | [AI Beyond Code: Entering the Agentic Era](https://philldev-coder256.github.io/talks/) | IndabaX AI Club · Kabale University | July 2026 |
 
 ---
 
@@ -38,4 +38,4 @@ Each talk is a self-contained HTML presentation with keyboard/touch navigation a
 ML Engineer · Software Developer · UCC National Communications Testbed  
 Deep Learning Indaba · IndabaX AI Club Facilitator  
 
-GitHub: [@philldevcoder](https://github.com/philldevcoder)
+GitHub: [@PhillDev-coder256](https://github.com/PhillDev-coder256)
