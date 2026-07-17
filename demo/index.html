@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Build Your First AI Agent — Demo</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconsax@1.0.7/css/iconsax.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0e1a; --surface: #111827; --surface2: #1e2a3a;
+      --accent: #6c63ff; --accent2: #00d4ff; --accent3: #ff6b6b;
+      --accent4: #ffd166; --accent5: #06d6a0;
+      --text: #f0f4ff; --muted: #8899bb; --border: rgba(108,99,255,0.25);
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+    a { color: var(--accent2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .back { display: inline-flex; align-items: center; gap: 8px; padding: 24px 48px; color: var(--muted); font-size: 0.9rem; }
+    .back:hover { color: var(--accent2); text-decoration: none; }
+    header { padding: 0 48px 40px; border-bottom: 1px solid var(--border); }
+    header h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; }
+    header h1 span { color: var(--accent2); }
+    header p { color: var(--muted); margin-top: 10px; font-size: 1rem; line-height: 1.6; max-width: 700px; }
+    .tag { display: inline-block; padding: 4px 14px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(108,99,255,0.15); border: 1px solid var(--accent); color: var(--accent2); margin-bottom: 18px; }
+    main { padding: 48px; max-width: 1200px; margin: 0 auto; }
+    .section { margin-bottom: 60px; }
+    .section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+    .section-sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 28px; }
+    .card { background: var(--surface2); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .step { display: flex; gap: 16px; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid var(--border); }
+    .step:last-child { border-bottom: none; }
+    .step-num { min-width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; flex-shrink: 0; }
+    .step h4 { font-size: 1rem; font-weight: 700; }
+    .step p { color: var(--muted); font-size: 0.9rem; margin-top: 4px; line-height: 1.6; }
+    .step code { background: rgba(108,99,255,0.15); padding: 2px 8px; border-radius: 4px; font-family: monospace; font-size: 0.85rem; color: var(--accent2); }
+    pre { background: #0d1117; border: 1px solid var(--border); border-radius: 14px; padding: 24px; font-size: 0.82rem; line-height: 1.8; overflow-x: auto; font-family: 'Courier New', monospace; }
+    .copy-btn { display: inline-flex; align-items: center; gap: 8px; background: rgba(108,99,255,0.15); border: 1px solid var(--accent); color: var(--accent2); padding: 8px 18px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-bottom: 12px; transition: all 0.2s; }
+    .copy-btn:hover { background: var(--accent); color: white; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; border: 1px solid var(--border); background: var(--surface2); }
+    .pill-green { border-color: var(--accent5); color: var(--accent5); }
+    .pill-blue { border-color: var(--accent2); color: var(--accent2); }
+    .pill-yellow { border-color: var(--accent4); color: var(--accent4); }
+    .chat-demo { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .chat-header { background: var(--surface); padding: 14px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
+    .chat-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent5); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+    .chat-messages { padding: 20px; display: flex; flex-direction: column; gap: 14px; min-height: 200px; max-height: 320px; overflow-y: auto; }
+    .msg { max-width: 80%; padding: 12px 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.6; }
+    .msg-user { background: rgba(108,99,255,0.2); border: 1px solid rgba(108,99,255,0.3); align-self: flex-end; }
+    .msg-agent { background: var(--surface2); border: 1px solid var(--border); align-self: flex-start; }
+    .msg-agent strong { color: var(--accent5); }
+    .chat-input-row { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; }
+    #chat-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text); font-size: 0.9rem; font-family: inherit; }
+    #chat-input:focus { outline: none; border-color: var(--accent); }
+    #chat-send { background: var(--accent); border: none; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
+    #chat-send:hover { background: #5a52e0; }
+    #chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+    .highlight { color: var(--accent2); }
+    .info-box { background: rgba(6,214,160,0.06); border: 1px solid rgba(6,214,160,0.3); border-radius: 12px; padding: 16px 20px; margin-top: 16px; }
+    .info-box p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+    .info-box strong { color: var(--accent5); }
+    footer { padding: 32px 48px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.85rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    @media (max-width: 768px) { main { padding: 24px; } .grid-2 { grid-template-columns: 1fr; } header, .back, footer { padding-left: 24px; padding-right: 24px; } }
+  </style>
+</head>
+<body>
+
+<a class="back" href="../"><i class="isax isax-arrow-left isax"></i> Back to all talks</a>
+
+<header>
+  <span class="tag">Hands-On Demo · IndabaX AI Club · Kabale University</span>
+  <h1>Build Your First <span>AI Agent</span></h1>
+  <p>No prior experience needed. Two paths — no-code and Python. Both work today. Pick whichever fits you.</p>
+  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
+    <span class="pill pill-green"><i class="isax isax-timer isax"></i> &nbsp;15–20 minutes</span>
+    <span class="pill pill-blue"><i class="isax isax-people isax"></i> &nbsp;All disciplines</span>
+    <span class="pill pill-yellow"><i class="isax isax-lamp-on isax"></i> &nbsp;Free tools only</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- WHAT IS AN AGENT -->
+  <div class="section">
+    <div class="section-title">What makes something an AI Agent?</div>
+    <div class="section-sub">Not just a chatbot — an agent has these four things:</div>
+    <div class="grid-2">
+      <div class="card" style="border-left:4px solid var(--accent4);">
+        <div style="display:flex; gap:14px; align-items:flex-start; margin-bottom:16px;">
+          <i class="isax isax-target isax" style="font-size:1.6rem; color:var(--accent4); flex-shrink:0;"></i>
+          <div><h4 style="color:var(--accent4);">System Prompt</h4><p style="color:var(--muted); font-size:0.9rem; margin-top:4px;">Defines the agent's role, personality, and rules. This is what makes it YOUR agent, not just a generic chatbot.</p></div>
+        </div>
+        <div style="display:flex; gap:14px; align-items:flex-start;">
+          <i class="isax isax-brain isax" style="font-size:1.6rem; color:var(--accent2); flex-shrink:0;"></i>
+          <div><h4 style="color:var(--accent2);">Memory</h4><p style="color:var(--muted); font-size:0.9rem; margin-top:4px;">The list of past messages. The agent reads the full history before every response — that's how it remembers context.</p></div>
+        </div>
+      </div>
+      <div class="card" style="border-left:4px solid var(--accent5);">
+        <div style="display:flex; gap:14px; align-items:flex-start; margin-bottom:16px;">
+          <i class="isax isax-setting-2 isax" style="font-size:1.6rem; color:var(--accent5); flex-shrink:0;"></i>
+          <div><h4 style="color:var(--accent5);">Tools</h4><p style="color:var(--muted); font-size:0.9rem; margin-top:4px;">Functions the agent can call — web search, calculator, email, database. Tools are what let it act beyond just talking.</p></div>
+        </div>
+        <div style="display:flex; gap:14px; align-items:flex-start;">
+          <i class="isax isax-repeat isax" style="font-size:1.6rem; color:#c77dff; flex-shrink:0;"></i>
+          <div><h4 style="color:#c77dff;">The Loop</h4><p style="color:var(--muted); font-size:0.9rem; margin-top:4px;">The agent keeps running — observe, reason, act — until the goal is achieved or you stop it. That's what separates it from a one-shot response.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- NO-CODE PATH -->
+  <div class="section">
+    <div class="section-title"><i class="isax isax-mouse isax" style="color:var(--accent4);"></i> &nbsp;Path 1: No-Code Agent with n8n</div>
+    <div class="section-sub">Drag, drop, connect. No programming at all.</div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="step"><div class="step-num">1</div><div><h4>Create a free n8n account</h4><p>Go to <a href="https://n8n.io" target="_blank">n8n.io</a> and sign up for free (cloud version). No download needed.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div><h4>Start a new workflow</h4><p>Click <strong>New Workflow</strong>. Search for and add a <code>Chat Trigger</code> node — this is the entry point for your agent.</p></div></div>
+        <div class="step"><div class="step-num">3</div><div><h4>Add an AI Agent node</h4><p>Search for <code>AI Agent</code> and connect it to your trigger. Inside the node, connect an <strong>OpenAI</strong> or <strong>Groq</strong> credential.</p></div></div>
+        <div class="step"><div class="step-num">4</div><div><h4>Write your system prompt</h4><p>In the agent settings, add your persona. Example:<br/><em>"You are a helpful academic advisor for Kabale University students…"</em></p></div></div>
+        <div class="step"><div class="step-num">5</div><div><h4>Add tools (optional but powerful)</h4><p>Connect a <code>Calculator</code> tool, a <code>HTTP Request</code> for web data, or a <code>Google Sheets</code> node to read/write data.</p></div></div>
+        <div class="step"><div class="step-num">6</div><div><h4>Click Test Workflow</h4><p>A chat window opens. Talk to your agent. It responds using your system prompt and any tools you connected.</p></div></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div class="card" style="border-top:3px solid var(--accent4);">
+          <h4 style="color:var(--accent4); margin-bottom:12px;">Agent ideas for your discipline</h4>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <p style="font-size:0.88rem; color:var(--muted);"><i class="isax isax-tree isax" style="color:var(--accent5);"></i> &nbsp;<strong style="color:var(--text);">Agriculture:</strong> crop advisory agent — reads weather + soil data, recommends planting schedule</p>
+            <p style="font-size:0.88rem; color:var(--muted);"><i class="isax isax-health isax" style="color:var(--accent3);"></i> &nbsp;<strong style="color:var(--text);">Health:</strong> patient FAQ agent — answers common clinic questions 24/7</p>
+            <p style="font-size:0.88rem; color:var(--muted);"><i class="isax isax-briefcase isax" style="color:var(--accent2);"></i> &nbsp;<strong style="color:var(--text);">Business:</strong> lead qualifier — reads incoming enquiries, scores and responds to them</p>
+            <p style="font-size:0.88rem; color:var(--muted);"><i class="isax isax-teacher isax" style="color:var(--accent4);"></i> &nbsp;<strong style="color:var(--text);">Education:</strong> study assistant — answers questions from your course outline</p>
+            <p style="font-size:0.88rem; color:var(--muted);"><i class="isax isax-buildings-2 isax" style="color:#c77dff;"></i> &nbsp;<strong style="color:var(--text);">Government:</strong> citizen guide — walks users through registration or application processes</p>
+          </div>
+        </div>
+        <div class="info-box">
+          <p><strong>Free API key for n8n:</strong> Get a free Groq key at <a href="https://console.groq.com" target="_blank">console.groq.com</a>. It's instant and runs Llama 3 — very fast, no credit card needed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- PYTHON PATH -->
+  <div class="section">
+    <div class="section-title"><i class="isax isax-code isax" style="color:var(--accent2);"></i> &nbsp;Path 2: Python Agent (Google Colab)</div>
+    <div class="section-sub">~20 lines. Runs in your browser. No laptop setup required.</div>
+    <div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+      <a href="https://colab.research.google.com" target="_blank" style="display:inline-flex; align-items:center; gap:8px; background:rgba(108,99,255,0.15); border:1px solid var(--accent); color:var(--accent2); padding:10px 20px; border-radius:10px; font-weight:600; font-size:0.9rem;"><i class="isax isax-export isax"></i> Open Google Colab</a>
+      <a href="https://console.groq.com" target="_blank" style="display:inline-flex; align-items:center; gap:8px; background:rgba(6,214,160,0.1); border:1px solid var(--accent5); color:var(--accent5); padding:10px 20px; border-radius:10px; font-weight:600; font-size:0.9rem;"><i class="isax isax-key isax"></i> Get Free Groq API Key</a>
+    </div>
+    <button class="copy-btn" onclick="copyCode()"><i class="isax isax-copy isax"></i> Copy Code</button>
+    <pre id="agent-code"><span style="color:#8b949e;"># ─── Step 1: Install Groq (run once) ────────────────────────────────────────</span>
+<span style="color:#79c0ff;">!pip install</span> groq <span style="color:#adb5bd;">-q</span>
+
+<span style="color:#8b949e;"># ─── Step 2: Import and connect ─────────────────────────────────────────────</span>
+<span style="color:#79c0ff;">from</span> groq <span style="color:#79c0ff;">import</span> Groq
+
+client = Groq(api_key=<span style="color:#a5d6ff;">"YOUR_GROQ_API_KEY"</span>)   <span style="color:#8b949e;"># paste your key from console.groq.com</span>
+
+<span style="color:#8b949e;"># ─── Step 3: Define your agent's role ───────────────────────────────────────</span>
+<span style="color:#8b949e;"># Change this system prompt to make it YOUR agent</span>
+SYSTEM_PROMPT = <span style="color:#a5d6ff;">"""
+You are a helpful study assistant for students at Kabale University, Uganda.
+You explain AI concepts in simple, clear language.
+When asked about real-world applications, give examples from Uganda and Africa.
+Keep answers concise and encouraging.
+"""</span>
+
+<span style="color:#8b949e;"># ─── Step 4: Start the conversation history (this IS the memory) ────────────</span>
+history = [{<span style="color:#a5d6ff;">"role"</span>: <span style="color:#a5d6ff;">"system"</span>, <span style="color:#a5d6ff;">"content"</span>: SYSTEM_PROMPT}]
+
+<span style="color:#8b949e;"># ─── Step 5: The agent loop ──────────────────────────────────────────────────</span>
+<span style="color:#79c0ff;">print</span>(<span style="color:#a5d6ff;">"Agent is ready! Type 'quit' to exit.\n"</span>)
+
+<span style="color:#79c0ff;">while</span> True:
+    user_input = <span style="color:#79c0ff;">input</span>(<span style="color:#a5d6ff;">"You: "</span>)
+    <span style="color:#79c0ff;">if</span> user_input.lower() <span style="color:#79c0ff;">in</span> [<span style="color:#a5d6ff;">"quit"</span>, <span style="color:#a5d6ff;">"exit"</span>]:
+        <span style="color:#79c0ff;">print</span>(<span style="color:#a5d6ff;">"Agent: Goodbye! Keep building."</span>)
+        <span style="color:#79c0ff;">break</span>
+
+    <span style="color:#8b949e;"># Add user message to memory</span>
+    history.append({<span style="color:#a5d6ff;">"role"</span>: <span style="color:#a5d6ff;">"user"</span>, <span style="color:#a5d6ff;">"content"</span>: user_input})
+
+    <span style="color:#8b949e;"># Send full history to the model (this is how it "remembers")</span>
+    response = client.chat.completions.create(
+        model=<span style="color:#a5d6ff;">"llama-3.3-70b-versatile"</span>,
+        messages=history,
+        max_tokens=<span style="color:#79c0ff;">512</span>
+    )
+
+    reply = response.choices[<span style="color:#79c0ff;">0</span>].message.content
+
+    <span style="color:#8b949e;"># Add agent reply to memory</span>
+    history.append({<span style="color:#a5d6ff;">"role"</span>: <span style="color:#a5d6ff;">"assistant"</span>, <span style="color:#a5d6ff;">"content"</span>: reply})
+
+    <span style="color:#79c0ff;">print</span>(<span style="color:#a5d6ff;">f"\nAgent: </span>{reply}<span style="color:#a5d6ff;">\n"</span>)</pre>
+    <div class="info-box" style="margin-top:20px;">
+      <p><strong>How to run it:</strong> Open <a href="https://colab.research.google.com" target="_blank">Google Colab</a> → New Notebook → paste the code → replace <code style="color:var(--accent4);">YOUR_GROQ_API_KEY</code> → Run All. That's it.</p>
+    </div>
+  </div>
+
+
+  <!-- LIVE BROWSER DEMO -->
+  <div class="section">
+    <div class="section-title"><i class="isax isax-flash isax" style="color:var(--accent5);"></i> &nbsp;Try it Live — Right Here</div>
+    <div class="section-sub">A study assistant agent running in the browser. Ask it anything about AI agents.</div>
+    <div class="chat-demo" style="max-width:700px;">
+      <div class="chat-header">
+        <div class="chat-dot"></div>
+        <span style="font-weight:600; font-size:0.95rem;">KAB Study Assistant</span>
+        <span style="color:var(--muted); font-size:0.8rem; margin-left:auto;">Powered by Groq · Llama 3</span>
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="msg msg-agent"><strong>Agent:</strong> Hello! I'm your AI study assistant for the IndabaX AI session. Ask me anything about AI agents, the Agentic Era, or how to build your first agent. What would you like to know?</div>
+      </div>
+      <div class="chat-input-row">
+        <input id="chat-input" type="text" placeholder="Ask something about AI agents…" onkeydown="if(event.key==='Enter') sendMessage()"/>
+        <button id="chat-send" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+    <div class="info-box" style="max-width:700px; margin-top:12px;">
+      <p><strong>Note:</strong> This live demo uses a public Groq endpoint. For production use, always keep your API key server-side and never expose it in frontend code.</p>
+    </div>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div class="section">
+    <div class="section-title">What to build next</div>
+    <div class="section-sub">Once your first agent works, here are natural next steps:</div>
+    <div class="grid-2">
+      <div class="card" style="border-top:3px solid var(--accent2);">
+        <h4 style="color:var(--accent2); margin-bottom:14px;">Add a Tool</h4>
+        <p style="color:var(--muted); font-size:0.9rem; line-height:1.7;">Give your agent the ability to search the web, do calculations, or read a file. In Python, a tool is just a function you define and pass to the model. In n8n, it's a node you connect.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent5);">
+        <h4 style="color:var(--accent5); margin-bottom:14px;">Give it a Real Task</h4>
+        <p style="color:var(--muted); font-size:0.9rem; line-height:1.7;">Change the system prompt to something in your own field. Test it with real questions from your discipline. See where it helps and where it fails — that's how you improve it.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent4);">
+        <h4 style="color:var(--accent4); margin-bottom:14px;">Add Persistent Memory</h4>
+        <p style="color:var(--muted); font-size:0.9rem; line-height:1.7;">Save the conversation history to a file or database so the agent remembers previous sessions. In n8n, use a Google Sheets or Supabase node. In Python, write history to a JSON file.</p>
+      </div>
+      <div class="card" style="border-top:3px solid #c77dff;">
+        <h4 style="color:#c77dff; margin-bottom:14px;">Deploy it</h4>
+        <p style="color:var(--muted); font-size:0.9rem; line-height:1.7;">Share your agent with others. In n8n, activate the workflow and share the webhook URL. In Python, wrap it in a simple Flask or FastAPI app and host it free on Render or Railway.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>Phillip Ssempeebwa · IndabaX AI Club · Kabale University · 2026</span>
+  <span><a href="../">← All Talks</a> &nbsp;|&nbsp; <a href="../ai-beyond-code-agentic-era/">View Presentation</a></span>
+</footer>
+
+<script>
+  // Simple copy button
+  function copyCode() {
+    const code = document.getElementById('agent-code').innerText;
+    navigator.clipboard.writeText(code).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.innerHTML = '<i class="isax isax-tick-circle isax"></i> Copied!';
+      setTimeout(() => { btn.innerHTML = '<i class="isax isax-copy isax"></i> Copy Code'; }, 2000);
+    });
+  }
+
+  // Live chat demo — uses a CORS proxy to Groq
+  // Students should replace this with their own backend in production
+  const GROQ_API_KEY = ""; // Leave empty — demo uses simulated responses for the page
+  const messages = [
+    { role: "system", content: "You are a helpful and enthusiastic study assistant for IndabaX AI Club at Kabale University. You explain AI concepts clearly using examples from Uganda and Africa. Keep answers concise (2-4 sentences max) and encouraging." }
+  ];
+
+  // Simulated responses for demo (no API key needed on the page)
+  const simulatedResponses = {
+    default: [
+      "Great question! An AI agent is different from a regular chatbot because it has goals, memory, and can take actions — not just answer questions. Think of it as the difference between a calculator and a research assistant.",
+      "Exactly the right thing to think about! In Uganda, we could build agents for crop advisory (checking weather + soil data), patient triage at clinics, or helping citizens navigate government services — all real needs, all buildable with the tools we discussed today.",
+      "The key insight is this: the 'memory' in an AI agent is just a list of past messages. Every time the agent responds, it reads the full conversation history. That's how it 'remembers' what you said earlier.",
+      "A system prompt is like a job description for your agent. It tells the model who it is, what it can and can't do, and how it should behave. Change the system prompt and you have a completely different agent.",
+      "The Groq API is free and gives you access to Llama 3.3 — one of the best open models available. You can make 100s of calls per day for free, which is more than enough to build and test your first agent."
+    ]
+  };
+
+  let responseIndex = 0;
+
+  function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const messagesDiv = document.getElementById('chat-messages');
+    messagesDiv.innerHTML += `<div class="msg msg-user">${text}</div>`;
+    input.value = '';
+    document.getElementById('chat-send').disabled = true;
+
+    const typing = document.createElement('div');
+    typing.className = 'msg msg-agent';
+    typing.id = 'typing';
+    typing.innerHTML = '<strong>Agent:</strong> <em style="color:var(--muted);">thinking…</em>';
+    messagesDiv.appendChild(typing);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+    setTimeout(() => {
+      const responses = simulatedResponses.default;
+      const reply = responses[responseIndex % responses.length];
+      responseIndex++;
+      document.getElementById('typing').innerHTML = `<strong>Agent:</strong> ${reply}`;
+      document.getElementById('chat-send').disabled = false;
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }, 1200);
+  }
+</script>
+</body>
+</html>
